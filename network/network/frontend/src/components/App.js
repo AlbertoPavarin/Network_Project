@@ -1,17 +1,20 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import Home from "./Home";
 
-export default class App extends Component 
-{
-    constructor(props){
-        super(props);
-    }
 
-    render() 
-    {
-        return <h1>Testing</h1>;
-    }
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return(
+        <Home></Home>
+    );
+  }
 }
 
-const div = document.getElementById("app");
-render(<App />, div);
+const div = createRoot(document.getElementById("app"));
+div.render(<App />);
