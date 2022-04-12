@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
+import { Link } from "react-router-dom"
 
 export default class Home extends Component {
     constructor(props) {
@@ -8,7 +9,6 @@ export default class Home extends Component {
             username: "",
             email: "",
             password: "",
-            passwordConfirm: "",
       };
       this.usernameChange = this.usernameChange.bind(this)
       this.emailChange = this.emailChange.bind(this)
@@ -34,24 +34,24 @@ export default class Home extends Component {
         });
     }
 
-    buttonPressed(){
-        const requestFields = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+    buttonPressed(e){
+        e.preventDefault();
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                username: this.state.username,
-                email: this.state.email,
-                password: this.state.password,
+              username: this.state.username,
+              email: this.state.email,
+              password: this.state.password,
             }),
-        };
-
-        fetch('/api/create-user', requestFields)
-        .then((response) => response.json)
-        .then((data) => console.log(data));
-    }
-
+          };
+          fetch("/api/create-user", requestOptions)
+            .then((response) => response.json())
+            .then((data) => window.location.href = `/login/${this.state.username}`);
+        }
+        
     render(){
-        return (
+        return (    
             <div className="register mt-5">
                 <h1>Register</h1>
                 <form className="mt-4">   

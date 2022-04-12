@@ -1,3 +1,4 @@
+import json
 from django.db import IntegrityError
 from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from rest_framework import generics
@@ -27,5 +28,5 @@ class CreateUserView(APIView):
                 user = User(username=username, email=email, password=password)
                 user.save()
             except IntegrityError:
-                return Response("Errore utente già esistente", status=405)
-        return Response(UserSerializer(user), status=201)
+                return Response({'Error': 'User already exist'})
+        return Response(UserSerializer(user))
