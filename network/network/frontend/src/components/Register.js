@@ -47,7 +47,7 @@ export default class Home extends Component {
           };
           fetch("/api/create-user", requestOptions)
             .then((response) => response.json())
-            .then((data) => window.location.href = `/login/${this.state.username}`);
+            .then((data) => window.location.href = `/login`);
         }
         
     render(){
