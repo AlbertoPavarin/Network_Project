@@ -1,4 +1,5 @@
 from django.db import IntegrityError
+from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from rest_framework import generics
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -28,5 +29,3 @@ class CreateUserView(APIView):
             except IntegrityError:
                 return Response("Errore utente già esistente", status=405)
         return Response(UserSerializer(user), status=201)
-
-            

@@ -45,7 +45,7 @@ export default class Home extends Component {
             }),
         };
 
-        fetch('/api/user', requestFields)
+        fetch('/api/create-user', requestFields)
         .then((response) => response.json)
         .then((data) => console.log(data));
     }
