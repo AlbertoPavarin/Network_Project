@@ -44,6 +44,10 @@ export default class Home extends Component {
 
     buttonPressed(e){
         e.preventDefault();
+        if (this.state.password.toString() != this.state.passwordConf.toString()){
+            document.getElementById('error-message').innerHTML = "Passwords must match";
+            return -1;
+        }
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -60,7 +64,7 @@ export default class Home extends Component {
                 }
                 throw new Error(response.data);
             })
-            .then((data) => console.log(data)/*window.location.href = `/login`*/)
+            .then((data) => window.location.href = '/login')
             .catch((error) => {
                 document.getElementById('error-message').innerHTML = "User already exist";
             });

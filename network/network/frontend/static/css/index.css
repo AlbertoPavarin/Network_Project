@@ -1,6 +1,10 @@
-.register {
+.register, .login {
     margin: auto;
     width: 50%;
     padding: 10px;
     text-align: center;
   }
+
+#error-message{
+  color: red;
+}
