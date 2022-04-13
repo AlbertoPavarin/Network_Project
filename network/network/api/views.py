@@ -28,5 +28,5 @@ class CreateUserView(APIView):
                 user = User(username=username, email=email, password=password)
                 user.save()
             except IntegrityError:
-                return Response({'Error': 'User already exist'})
+                return Response({'User already exist'})
         return Response(UserSerializer(user))

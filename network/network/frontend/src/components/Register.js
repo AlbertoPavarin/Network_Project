@@ -9,11 +9,13 @@ export default class Home extends Component {
             username: "",
             email: "",
             password: "",
+            passwordConf: "",
       };
-      this.usernameChange = this.usernameChange.bind(this)
-      this.emailChange = this.emailChange.bind(this)
-      this.passwordChange = this.passwordChange.bind(this)
-      this.buttonPressed = this.buttonPressed.bind(this)
+      this.usernameChange = this.usernameChange.bind(this);
+      this.emailChange = this.emailChange.bind(this);
+      this.passwordChange = this.passwordChange.bind(this);
+      this.passwordConfermationChange = this.passwordConfermationChange.bind(this)
+      this.buttonPressed = this.buttonPressed.bind(this);
     }
 
     usernameChange(e) {  // Funzione per il cambio dello username, viene preso il campo dell'oggetto passato come parametRO
@@ -34,6 +36,12 @@ export default class Home extends Component {
         });
     }
 
+    passwordConfermationChange(e){
+        this.setState({
+            passwordConf: e.target.value,
+        });
+    }
+
     buttonPressed(e){
         e.preventDefault();
         const requestOptions = {
@@ -46,14 +54,23 @@ export default class Home extends Component {
             }),
           };
           fetch("/api/create-user", requestOptions)
-            .then((response) => response.json())
-            .then((data) => window.location.href = `/login`);
+            .then((response) => {
+                if (response.ok){
+                    return response.json();
+                }
+                throw new Error(response.data);
+            })
+            .then((data) => console.log(data)/*window.location.href = `/login`*/)
+            .catch((error) => {
+                document.getElementById('error-message').innerHTML = "User already exist";
+            });
         }
         
     render(){
         return (    
             <div className="register mt-5">
                 <h1>Register</h1>
+                <h5 id="error-message"></h5>
                 <form className="mt-4">   
                     <label for="username">Username</label>
                     <input name="username" type="text" onChange={this.usernameChange} class="form-control w-100" />
@@ -61,6 +78,8 @@ export default class Home extends Component {
                     <input name="email" type="email" className="form-control w-100" onChange={this.emailChange}/>
                     <label className="mt-4" for="password">Password</label>
                     <input name="password" type="password" className="form-control w-100" onChange={this.passwordChange}/>
+                    <label className="mt-4" for="passwordConf">Password Confermation</label>
+                    <input name="passwordConf" type="password" className="form-control w-100" onChange={this.passwordConfermationChange}/>
                     <input type="Submit" className="btn btn-primary mt-4" value="Register" onClick={this.buttonPressed}/>
                 </form>       
             </div>          
