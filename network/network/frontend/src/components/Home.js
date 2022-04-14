@@ -7,7 +7,6 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
-import Login from "./Login";
 import HomePage from './HomePage';
 import Register from "./Register";
 
@@ -21,7 +20,6 @@ export default class Home extends Component {
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>} />
         </Routes>
       </Router>
