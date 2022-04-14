@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import HomePage from './HomePage';
 import Register from "./Register";
+import Profile from "./Profile";
 
 export default class Home extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ export default class Home extends Component {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<Register/>} />
+          <Route path="/User/:username" element={<Profile />}/>
         </Routes>
       </Router>
     );
