@@ -10,6 +10,7 @@ import {
 import HomePage from './HomePage';
 import Register from "./Register";
 import Profile from "./Profile";
+import NewPost from "./NewPost";
 
 export default class Home extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ export default class Home extends Component {
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<Register/>} />
           <Route path="/User/:username" element={<Profile />}/>
+          <Route path="/NewPost" element={<NewPost />} />
         </Routes>
       </Router>
     );

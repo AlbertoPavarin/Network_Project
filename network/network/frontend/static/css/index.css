@@ -8,3 +8,7 @@
 #error-message{
   color: red;
 }
+
+.content{
+  min-height: 250px;
+}

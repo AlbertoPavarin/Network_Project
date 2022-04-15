@@ -1,6 +1,5 @@
 import json
 from django.db import IntegrityError
-from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from rest_framework import generics
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +7,7 @@ from .models import User
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -19,8 +18,7 @@ class UserView(generics.CreateAPIView):
 class CreateUserView(APIView):
     serializerClass = CreateUserSerializer
     
-
-    def get(self, request, format=None):
+    def post(self, request, format=None):
         serializer = self.serializerClass(data=request.data) # dati
         if serializer.is_valid():
             username = serializer.data.get('username')
@@ -47,3 +45,22 @@ class GetUser(APIView):
             return Response({'User not found': 'Invalid username'}, status=404)
         
         return Response({'Bad request': 'No username passed'}, status=400)
+
+class PostView(generics.CreateAPIView):
+    query_set = Post.objects.all()
+    serializer_class = PostSerializer
+
+class CreatePostView(APIView):
+    serializer_class = CreatePostSerializer
+
+    #@login_required
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            owner = serializer.data.get('owner')
+            user = User.objects.get(pk=owner) 
+            content = serializer.data.get('content')
+            post = Post(owner=user, content=content)
+            post.save()
+        
+        return Response(serializer.data)
