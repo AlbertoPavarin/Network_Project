@@ -11,6 +11,7 @@ import HomePage from './HomePage';
 import Register from "./Register";
 import Profile from "./Profile";
 import NewPost from "./NewPost";
+import Login from "./Login";
 
 export default class Home extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ export default class Home extends Component {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<Register/>} />
+          <Route path="/login" element={<Login/>} />
           <Route path="/User/:username" element={<Profile />}/>
           <Route path="/NewPost" element={<NewPost />} />
         </Routes>

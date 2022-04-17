@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-45%v#o81u*&o-fae%idindzjf1#qym_gttnb1tr5a8e$jk#ti3
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'api.User'
 
 # Application definition
 
@@ -53,6 +54,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'network.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -70,8 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'network.wsgi.application'
-
-AUTH_USER_MODEL = 'api.User'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

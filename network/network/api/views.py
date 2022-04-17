@@ -1,13 +1,16 @@
 import json
 from django.db import IntegrityError
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from rest_framework import generics
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from .models import User
+from rest_framework import status
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -21,15 +24,34 @@ class CreateUserView(APIView):
     def post(self, request, format=None):
         serializer = self.serializerClass(data=request.data) # dati
         if serializer.is_valid():
-            username = serializer.data.get('username')
-            email = serializer.data.get('email')
-            password = serializer.data.get('password')
-            try:
-                user = User(username=username, email=email, password=password)
-                user.save()
-            except IntegrityError:
-                return Response({'User already exist'})
-        return Response(UserSerializer(user))
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+@csrf_exempt
+def login_view(request):
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
+            user = User.objects.filter(username=username)
+            if len(user) > 0:
+                if user[0].is_superuser == True:
+                    userA = authenticate(request, username=username, password=password)
+                    if userA is not None:
+                        login(request, userA)
+                        return JsonResponse({'ok':'ok'})
+            
+                if user[0].password == password:
+                    login(request, user[0])
+                    return JsonResponse({'ok':'ok'})
+                else:
+                    return JsonResponse({'Bad request':'Bad request'}, status=status.HTTP_400_BAD_REQUEST )       
+            return JsonResponse({'Bad request':'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return HttpResponseRedirect('/login')
+        
+            
 
 class GetUser(APIView):
     serializer_class = UserSerializer
@@ -57,10 +79,8 @@ class CreatePostView(APIView):
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            owner = serializer.data.get('owner')
-            user = User.objects.get(pk=owner) 
             content = serializer.data.get('content')
-            post = Post(owner=user, content=content)
+            post = Post(owner=request.user, content=content)
             post.save()
         
         return Response(serializer.data)

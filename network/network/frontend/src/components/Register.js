@@ -10,6 +10,7 @@ export default class Register extends Component {
             email: "",
             password: "",
             passwordConf: "",
+            is_active: true,
       };
       this.usernameChange = this.usernameChange.bind(this);
       this.emailChange = this.emailChange.bind(this);
@@ -55,6 +56,7 @@ export default class Register extends Component {
               username: this.state.username,
               email: this.state.email,
               password: this.state.password,
+              is_active: this.state.is_active
             }),
           };
           fetch("/api/create-user", requestOptions)

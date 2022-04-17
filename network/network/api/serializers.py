@@ -1,4 +1,6 @@
 from pyexpat import model
+
+from attr import field
 from .models import Post, User
 from rest_framework import serializers
 
@@ -11,7 +13,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
-
+    
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
