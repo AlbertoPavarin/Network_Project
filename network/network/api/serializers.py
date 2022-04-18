@@ -22,4 +22,4 @@ class PostSerializer(serializers.ModelSerializer):
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('owner', 'content', 'timestamp')
+        fields = ('content', 'timestamp')

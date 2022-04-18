@@ -1,6 +1,6 @@
 import json
 from django.db import IntegrityError
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse, QueryDict
 from rest_framework import generics
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -17,6 +17,10 @@ from django.views.decorators.csrf import csrf_exempt
 class UserView(generics.CreateAPIView):
     querySet = User.objects.all()
     serializer_class = UserSerializer
+
+    def get(self, request, format=None):
+        serializer = UserSerializer(self.querySet, many=True)
+        return Response({'detail': serializer.data})
 
 class CreateUserView(APIView):
     serializerClass = CreateUserSerializer
@@ -69,8 +73,13 @@ class GetUser(APIView):
         return Response({'Bad request': 'No username passed'}, status=400)
 
 class PostView(generics.CreateAPIView):
-    query_set = Post.objects.all()
+    query_set = Post.objects.all().order_by('-timestamp')
     serializer_class = PostSerializer
+
+    def get(self, request, format=None):
+        serializer = PostSerializer(self.query_set, many=True)
+        return Response({'detail': serializer.data})
+
 
 class CreatePostView(APIView):
     serializer_class = CreatePostSerializer
@@ -82,5 +91,6 @@ class CreatePostView(APIView):
             content = serializer.data.get('content')
             post = Post(owner=request.user, content=content)
             post.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
