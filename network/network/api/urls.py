@@ -9,4 +9,5 @@ urlpatterns = [
     path('create-post', CreatePostView.as_view()),
     path('login', login_view),
     path('posts', PostView.as_view()),
+    path('get-user-id/', GetUserByID.as_view()),
 ]

@@ -6,9 +6,7 @@ export default class Login extends Component
     constructor(props){
         super(props);
         this.state = {
-            owners: [],
-            contents: [],
-            timestamps: [],
+            posts: []
         }
         this.getPosts();
     }
@@ -19,12 +17,19 @@ export default class Login extends Component
         .then((data) => {
             data['detail'].forEach(post => {
                 this.setState({
-                    owners: this.state.owners.push(post['owner']),
-                    contents: this.state.contents.push(post['content']),
-                    timestamps: this.state.timestamps.push(post['timestamp'])
+                    posts: this.state.posts.push(post),
                 })
+                console.log()
+                fetch('/api/get-user-id/' + '?id=' + post['owner'])
+                .then((response) => response.json())
+                .then((data) => {
+                    post['owner'] = data.username;
+                    console.log(post['owner'])
+                    const postDiv = document.createElement('div');
+                    postDiv.innerHTML = `${post['owner']}, ${post['content']}, ${post['timestamp']}`;
+                    document.querySelector('.post-container').appendChild(postDiv);
+                });
             });
-            console.log(this.state.owners)
         })
     }
 
@@ -34,6 +39,9 @@ export default class Login extends Component
         return (
         <div>
             <h1>Posts</h1>
+            <div className="post-container">
+                
+            </div>
         </div>
         )
     }

@@ -56,6 +56,21 @@ def login_view(request):
         return HttpResponseRedirect('/login')
         
             
+class GetUserByID(APIView):
+    serializer_class = UserSerializer
+    lookup_url_kwarg = 'id'
+
+    def get(self, request, format=None):
+        id = request.GET.get(self.lookup_url_kwarg)
+        if id is not None:
+            user = User.objects.filter(pk=id)
+            if len(user) > 0:
+                data = UserSerializer(user[0]).data
+                return Response(data, status=200)
+            return Response({'User not found': 'Invalid id'}, status=404)
+        
+        return Response({'Bad request': 'No id passed'}, status=400)
+
 
 class GetUser(APIView):
     serializer_class = UserSerializer
