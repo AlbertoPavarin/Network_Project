@@ -12,3 +12,18 @@
 .content{
   min-height: 250px;
 }
+
+.post{
+  border-style: solid;
+  border-width: thin;
+  border-color: #ccc;
+  margin-bottom: 20px;
+}
+
+.owner, .postContent, .timestamp{
+  margin-left: 10px;
+}
+
+.timestamp{
+  font-size: 13px;
+}

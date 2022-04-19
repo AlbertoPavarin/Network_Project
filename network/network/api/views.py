@@ -1,3 +1,4 @@
+from cgitb import lookup
 import json
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse, QueryDict
@@ -67,9 +68,9 @@ class GetUserByID(APIView):
             if len(user) > 0:
                 data = UserSerializer(user[0]).data
                 return Response(data, status=200)
-            return Response({'User not found': 'Invalid id'}, status=404)
+            return Response({'User not found': 'Invalid id'}, status=status.HTTP_404_NOT_FOUND)
         
-        return Response({'Bad request': 'No id passed'}, status=400)
+        return Response({'Bad request': 'No id passed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetUser(APIView):
@@ -83,9 +84,9 @@ class GetUser(APIView):
             if len(user) > 0:
                 data = UserSerializer(user[0]).data
                 return Response(data, status=200)
-            return Response({'User not found': 'Invalid username'}, status=404)
+            return Response({'User not found': 'Invalid username'}, status=status.HTTP_404_NOT_FOUND)
         
-        return Response({'Bad request': 'No username passed'}, status=400)
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PostView(generics.CreateAPIView):
     query_set = Post.objects.all().order_by('-timestamp')
@@ -94,6 +95,20 @@ class PostView(generics.CreateAPIView):
     def get(self, request, format=None):
         serializer = PostSerializer(self.query_set, many=True)
         return Response({'detail': serializer.data})
+
+class GetUserPostView(APIView):
+    serializer_class = PostSerializer
+    lookup_url_karg = 'username'
+
+    def get(self, request, format=None):
+        username = request.GET.get(self.lookup_url_karg)
+        user = User.objects.filter(username=username)
+        if username is not None:
+            userPosts = Post.objects.filter(owner=user[0])
+            data = PostSerializer(userPosts, many=True)
+            return Response({'detail': data.data})
+        
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreatePostView(APIView):

@@ -24,9 +24,11 @@ export default class Login extends Component
                 .then((response) => response.json())
                 .then((data) => {
                     post['owner'] = data.username;
-                    console.log(post['owner'])
                     const postDiv = document.createElement('div');
-                    postDiv.innerHTML = `${post['owner']}, ${post['content']}, ${post['timestamp']}`;
+                    postDiv.className = 'post';
+                    postDiv.innerHTML = `<b class="owner text-primary">${post['owner']}</b><br>
+                                        <span class="postContent">${post['content']}</span><br>
+                                        <span class="timestamp text-secondary">${post['timestamp']}</span>`;
                     document.querySelector('.post-container').appendChild(postDiv);
                 });
             });
