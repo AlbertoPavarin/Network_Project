@@ -89,11 +89,11 @@ class GetUser(APIView):
         return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PostView(generics.CreateAPIView):
-    query_set = Post.objects.all().order_by('-timestamp')
     serializer_class = PostSerializer
 
     def get(self, request, format=None):
-        serializer = PostSerializer(self.query_set, many=True)
+        query_set = Post.objects.all().order_by('-timestamp')
+        serializer = PostSerializer(query_set, many=True)
         return Response({'detail': serializer.data})
 
 class GetUserPostView(APIView):
@@ -102,11 +102,13 @@ class GetUserPostView(APIView):
 
     def get(self, request, format=None):
         username = request.GET.get(self.lookup_url_karg)
-        user = User.objects.filter(username=username)
         if username is not None:
-            userPosts = Post.objects.filter(owner=user[0])
-            data = PostSerializer(userPosts, many=True)
-            return Response({'detail': data.data})
+            user = User.objects.filter(username=username)
+            if len(user) > 0:
+                userPosts = Post.objects.filter(owner=user[0]).order_by('-timestamp')
+                data = PostSerializer(userPosts, many=True)
+                return Response({'detail': data.data})
+            return Response({'User not found': 'Invalid username'}, status=status.HTTP_404_NOT_FOUND)
         
         return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
 

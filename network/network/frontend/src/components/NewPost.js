@@ -51,7 +51,7 @@ export default class NewPost extends Component {
     };
     fetch("/api/create-post", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => window.location.href = '/');
   }
 
   render() {

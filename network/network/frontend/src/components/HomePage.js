@@ -5,9 +5,6 @@ export default class Login extends Component
 {
     constructor(props){
         super(props);
-        this.state = {
-            posts: []
-        }
         this.getPosts();
     }
 
@@ -16,17 +13,13 @@ export default class Login extends Component
         .then((response) => response.json())
         .then((data) => {
             data['detail'].forEach(post => {
-                this.setState({
-                    posts: this.state.posts.push(post),
-                })
-                console.log()
                 fetch('/api/get-user-id/' + '?id=' + post['owner'])
                 .then((response) => response.json())
                 .then((data) => {
                     post['owner'] = data.username;
                     const postDiv = document.createElement('div');
                     postDiv.className = 'post';
-                    postDiv.innerHTML = `<b class="owner text-primary">${post['owner']}</b><br>
+                    postDiv.innerHTML = `<b class="owner text-primary"><a href="/User/${post['owner']}">${post['owner']}</a></b><br>
                                         <span class="postContent">${post['content']}</span><br>
                                         <span class="timestamp text-secondary">${post['timestamp']}</span>`;
                     document.querySelector('.post-container').appendChild(postDiv);
