@@ -10,5 +10,6 @@ urlpatterns = [
     path('login', login_view),
     path('posts', PostView.as_view()),
     path('get-user-id/', GetUserByID.as_view()),
-    path('get-user-posts/', GetUserPostView.as_view())
+    path('get-user-posts/', GetUserPostView.as_view()),
+    path('get-comments/', CommentView.as_view())
 ]

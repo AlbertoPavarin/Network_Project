@@ -1,7 +1,4 @@
-from pyexpat import model
-
-from attr import field
-from .models import Post, User
+from .models import Comment, Post, User
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,3 +20,8 @@ class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('content', 'timestamp')
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'commentator', 'post', 'content')

@@ -126,3 +126,19 @@ class CreatePostView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CommentView(APIView): 
+    serializer_class = CommentSerializer
+    lookup_url_kwarg = 'id'
+
+    def get(self, request, format=None):
+        post_id = request.GET.get(self.lookup_url_kwarg)
+        if post_id is not None:
+            post = Post.objects.filter(pk = post_id)
+            if len(post) > 0:
+                comments = post[0].post.all()
+                serializer = CommentSerializer(comments, many=True)
+                return Response({'detail':serializer.data}, status=status.HTTP_200_OK)
+            return Response({'Not found': 'Post Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'Bad request': 'No id passed'}, status=status.HTTP_400_BAD_REQUEST)    
