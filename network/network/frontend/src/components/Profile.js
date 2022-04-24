@@ -35,12 +35,29 @@ export default class Profile extends Component{
         fetch('/api/get-user-posts/' + '?username=' + this.usernameToFind)
         .then((response) => response.json())
         .then((data) => data['detail'].forEach(post => {
+            const months = {
+                0: "January",
+                1: "February",
+                2: "March",
+                3: "April",
+                4: "May",
+                5: "June",
+                6: "July",
+                7: "August",
+                8: "September",
+                9: "October",
+                10: "November",
+                11: "December",
+              };
             post['owner'] = this.usernameToFind;
+            const d = new Date(post["timestamp"]);
+            post["timestamp"] = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
             const postDiv = document.createElement('div');
             postDiv.className = 'post';
             postDiv.innerHTML = `<b class="owner text-primary"><a href="/User/${post['owner']}">${post['owner']}</a></b><br>
                                 <span class="postContent">${post['content']}</span><br>
-                                <span class="timestamp text-secondary">${post['timestamp']}</span>`;
+                                <span class="timestamp text-secondary">${post['timestamp']}</span><br>
+                                <a href="/Comments/${post['id']}"><span class="comments-text text-secondary">Go to comments . . .</span></a>`;
             document.querySelector('.post-container').appendChild(postDiv);
         }))
     }
@@ -49,7 +66,9 @@ export default class Profile extends Component{
         return (
             <div id='user-container'>
                 <p>Username: {this.state.username}</p>
-                <div className='post-container'></div>
+                <div className='post-container'>
+                    <hr />
+                </div>
             </div>
         )
     }

@@ -14,17 +14,17 @@
   min-height: 250px;
 }
 
-.post{
+.post, .comment{
   border-style: solid;
   border-width: thin;
   border-color: #ccc;
   margin-bottom: 20px;
 }
 
-.owner, .postContent, .timestamp{
+.owner, .postContent, .timestamp, .comments-text, .commentator, .commentContent{
   margin-left: 10px;
 }
 
-.timestamp{
+.timestamp, .comments-text{
   font-size: 13px;
 }

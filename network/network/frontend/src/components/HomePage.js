@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 
-export default class Login extends Component {
+export default class HomePage extends Component {
   constructor(props) {
     super(props);
     this.getPosts();
@@ -35,8 +35,9 @@ export default class Login extends Component {
               const postDiv = document.createElement("div");
               postDiv.className = "post";
               postDiv.innerHTML = `<b class="owner text-primary"><a href="/User/${post["owner"]}">${post["owner"]}</a></b><br>
-                                        <span class="postContent">${post["content"]}</span><br>
-                                        <span class="timestamp text-secondary">${post["timestamp"]}</span>`;
+                                   <span class="postContent">${post["content"]}</span><br>
+                                   <span class="timestamp text-secondary">${post["timestamp"]}</span><br>
+                                   <a href="/Comments/${post['id']}"><span class="comments-text text-secondary">Go to comments . . .</span></a>`;
               document.querySelector(".post-container").appendChild(postDiv);
             });
         });
@@ -47,7 +48,9 @@ export default class Login extends Component {
     return (
       <div>
         <h1>Posts</h1>
-        <div className="post-container"></div>
+        <div className="post-container">
+          <hr />
+        </div>
       </div>
     );
   }

@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout', logout_view, name="logout"),
     path('User/<str:username>', index),
     path('NewPost', index),
+    path('Comments/<int:id>', index),
 ]
