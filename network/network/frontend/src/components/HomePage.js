@@ -5,23 +5,23 @@ export default class HomePage extends Component {
   constructor(props) {
     super(props);
     this.getPosts();
+    this.months = {
+      0: "January",
+      1: "February",
+      2: "March",
+      3: "April",
+      4: "May",
+      5: "June",
+      6: "July",
+      7: "August",
+      8: "September",
+      9: "October",
+      10: "November",
+      11: "December",
+    };
   }
 
   getPosts() {
-    const months = {
-        0: "January",
-        1: "February",
-        2: "March",
-        3: "April",
-        4: "May",
-        5: "June",
-        6: "July",
-        7: "August",
-        8: "September",
-        9: "October",
-        10: "November",
-        11: "December",
-      };
     fetch("/api/posts")
       .then((response) => response.json())
       .then((data) => {
@@ -30,7 +30,7 @@ export default class HomePage extends Component {
             .then((response) => response.json())
             .then((data) => {
               const d = new Date(post["timestamp"]);
-              post["timestamp"] = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+              post["timestamp"] = `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`;
               post["owner"] = data.username;
               const postDiv = document.createElement("div");
               postDiv.className = "post";
@@ -39,6 +39,7 @@ export default class HomePage extends Component {
                                    <span class="timestamp text-secondary">${post["timestamp"]}</span><br>
                                    <a href="/Comments/${post['id']}"><span class="comments-text text-secondary">Go to comments . . .</span></a>`;
               document.querySelector(".post-container").appendChild(postDiv);
+              postDiv.addEventListener('click', () => window.location.href = `Post/${post['id']}`);
             });
         });
       });

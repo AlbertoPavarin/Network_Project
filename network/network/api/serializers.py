@@ -7,7 +7,7 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'password', 'username', 'email')
+        fields = ('id', 'password', 'username', 'email', 'date_joined')
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,3 +33,8 @@ class CreateCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('content', 'post')
+
+class BioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name')

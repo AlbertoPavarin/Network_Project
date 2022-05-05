@@ -12,7 +12,9 @@ import Register from "./Register";
 import Profile from "./Profile";
 import NewPost from "./NewPost";
 import Login from "./Login";
-import Comments from "./Comments"
+import Comments from "./Comments";
+import Post from "./Post";
+import Bio from "./Bio"
 
 export default class Home extends Component {
   constructor(props) {
@@ -29,6 +31,8 @@ export default class Home extends Component {
           <Route path="/User/:username" element={<Profile />}/>
           <Route path="/NewPost" element={<NewPost />} />
           <Route path="/Comments/:id" element={<Comments />} />
+          <Route path="/Post/:id" element={<Post/>} />
+          <Route path="/EditBio" element={<Bio/>} />
         </Routes>
       </Router>
     );

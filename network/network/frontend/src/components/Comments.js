@@ -43,9 +43,7 @@ export default class Comments extends Component {
               commentDiv.className = "comment";
               commentDiv.innerHTML = `<b class="owner text-primary"><a href="/User/${comment["commentator"]}">${comment["commentator"]}</a></b><br>
                                         <span class="comments-text">${comment["content"]}</span><br>`;
-              document
-                .querySelector("#comments-container")
-                .appendChild(commentDiv);
+              document.querySelector("#comments-container").appendChild(commentDiv);
             });
         });
       });
@@ -60,7 +58,7 @@ export default class Comments extends Component {
   buttonPressed(e) {
     e.preventDefault();
     if (this.state.content.length <= 0) {
-      document.querySelector('#error-message').innerHTML = "Write Something";
+      document.querySelector("#error-message").innerHTML = "Write Something";
     }
     const requestOptions = {
       method: "POST",
@@ -74,9 +72,9 @@ export default class Comments extends Component {
       }),
     };
 
-    fetch('/api/create-comment', requestOptions)
-    .then((response) => response.json())
-    .then((data) => location.reload())
+    fetch("/api/create-comment", requestOptions)
+      .then((response) => response.json())
+      .then((data) => location.reload());
   }
 
   render() {
@@ -92,7 +90,12 @@ export default class Comments extends Component {
               className="form-control"
               onChange={this.contentChange}
             />
-            <input type="button" className="btn btn-primary mt-3" onClick={this.buttonPressed} value="Add" />
+            <input
+              type="button"
+              className="btn btn-primary mt-3"
+              onClick={this.buttonPressed}
+              value="Comment"
+            />
           </form>
         </div>
         <hr />

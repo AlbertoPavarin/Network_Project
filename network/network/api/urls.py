@@ -13,4 +13,6 @@ urlpatterns = [
     path('get-user-posts/', GetUserPostView.as_view()),
     path('get-comments/', CommentView.as_view()),
     path('create-comment', CreateCommentView.as_view()),
+    path('get-post/', GetPost.as_view()),
+    path('edit-bio/', EditBio.as_view()),
 ]

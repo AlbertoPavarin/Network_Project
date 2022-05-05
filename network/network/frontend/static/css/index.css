@@ -28,3 +28,18 @@
 .timestamp, .comments-text{
   font-size: 13px;
 }
+
+.post-view{
+  border-style: solid;
+  border-width: thin;
+  border-color: #ccc;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.owner-post-view{
+  font-size: 35px;
+}
+
+.postContent-post-view{
+  font-size: 28px;
+}

@@ -11,4 +11,6 @@ urlpatterns = [
     path('User/<str:username>', index),
     path('NewPost', index),
     path('Comments/<int:id>', index),
+    path('Post/<int:id>', index),
+    path('Edit/Bio/<str:username>', index),
 ]

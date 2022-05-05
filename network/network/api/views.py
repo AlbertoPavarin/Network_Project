@@ -1,4 +1,3 @@
-from cgitb import lookup
 import json
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse, QueryDict
@@ -96,6 +95,21 @@ class PostView(generics.CreateAPIView):
         serializer = PostSerializer(query_set, many=True)
         return Response({'detail': serializer.data})
 
+class GetPost(APIView):
+    serializer_class = PostSerializer
+    lookup_url_karg = 'id'
+
+    def get(self, request, format=None):
+        postId = request.GET.get(self.lookup_url_karg)
+        if postId is not None:
+            post = Post.objects.filter(pk=postId)
+            if len(post) > 0:
+                return Response(PostSerializer(post[0]).data, status=status.HTTP_200_OK)
+            return Response({'Post not found': 'Invalid id'})
+
+        return Response({'Bad request': 'No id passed'}, staus=status.HTTP_400_BAD_REQUEST)
+
+
 class GetUserPostView(APIView):
     serializer_class = PostSerializer
     lookup_url_karg = 'username'
@@ -159,3 +173,19 @@ class CreateCommentView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EditBio(APIView):
+    serializer_class = BioSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            firstName = serializer.data.get('first_name')
+            lastName = serializer.data.get('last_name')
+            user = User.objects.filter(pk=request.user.id)
+            if len(user) > 0:
+                user.update(last_name=lastName, first_name=firstName)
+                    
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
