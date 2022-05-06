@@ -1,9 +1,9 @@
-from getpass import getuser
 from django.urls import path
 from .views import *
 
 urlpatterns = [
     path('create-user', CreateUserView.as_view()),
+    path('isLoggedIn', isLoggedIn),
     path('users', UserView.as_view()),
     path('get-user/', GetUser.as_view()),
     path('create-post', CreatePostView.as_view()),

@@ -22,6 +22,14 @@ class UserView(generics.CreateAPIView):
         serializer = UserSerializer(self.querySet, many=True)
         return Response({'detail': serializer.data})
 
+def isLoggedIn(request):
+    if request.method == 'GET':
+        print(request.user)
+        if len(request.user.username) > 0:
+            return JsonResponse({'Success': f'{request.user.username}'}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({'Not ok': 'Not logged in'}, status=status.HTTP_404_NOT_FOUND)
+
 class CreateUserView(APIView):
     serializerClass = CreateUserSerializer
     

@@ -41,12 +41,34 @@ export default class Profile extends Component{
                 username: data.username,
                 date_joined: `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`,
             });
+            this.isLoggedIn();
         })
         .catch((error) => {
             const errorDiv = document.querySelector('#user-container');
             errorDiv.id = "error-message";
             errorDiv.innerHTML = 'Error: User doesn\'t exist';
         });
+    }
+
+    isLoggedIn(){
+        fetch('/api/isLoggedIn')
+        .then((response) => {
+            if (response.ok){
+                return response.json();
+            }
+            throw new Error(response.data);
+        })
+        .then((data) => {
+            console.log(this.state.username);
+            if (this.state.username == data['Success'])
+            {
+                console.log('sus');
+                const btnDiv = document.createElement('div')
+                btnDiv.innerHTML = `<input type="button" class="btn btn-primary" value="Edit Bio">`;
+                btnDiv.onclick=this.editBioPressed;
+                document.querySelector('#edit-bio-btn').appendChild(btnDiv);
+            }
+        })
     }
 
     getUserPosts(){
@@ -63,6 +85,7 @@ export default class Profile extends Component{
                                 <span class="timestamp text-secondary">${post['timestamp']}</span><br>
                                 <a href="/Comments/${post['id']}"><span class="comments-text text-secondary">Go to comments . . .</span></a>`;
             document.querySelector('.post-container').appendChild(postDiv);
+            postDiv.addEventListener('click', () => window.location.href = `/Post/${post['id']}`);
         }))
     }
 
@@ -77,7 +100,8 @@ export default class Profile extends Component{
             <div id='user-container'>
                 <p>Username: {this.state.username}</p>
                 <p className="text-secondary">Joined: {this.state.date_joined}</p>
-                <input type="button" className='btn btn-primary' value="Edit Bio" onClick={this.editBioPressed}/>
+                <div id="edit-bio-btn">
+                </div>
                 <div className='post-container'>
                     <hr />
                 </div>
