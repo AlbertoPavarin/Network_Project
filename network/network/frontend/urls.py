@@ -12,5 +12,5 @@ urlpatterns = [
     path('NewPost', index),
     path('Comments/<int:id>', index),
     path('Post/<int:id>', index),
-    path('Edit/Bio/<str:username>', index),
+    path('EditBio', index),
 ]

@@ -62,7 +62,6 @@ export default class Profile extends Component{
             console.log(this.state.username);
             if (this.state.username == data['Success'])
             {
-                console.log('sus');
                 const btnDiv = document.createElement('div')
                 btnDiv.innerHTML = `<input type="button" class="btn btn-primary" value="Edit Bio">`;
                 btnDiv.onclick=this.editBioPressed;
@@ -92,7 +91,7 @@ export default class Profile extends Component{
     editBioPressed(e)
     {
         e.preventDefault();
-        console.log("Tullio dioo");
+        window.location.href = "/EditBio"
     }
 
     render(){
