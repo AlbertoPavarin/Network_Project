@@ -22,9 +22,32 @@ export default class NewPost extends Component {
     super(params);
     this.state = {
       content: "",
+      logged: "",
     };
+    this.IsLoggedIn();
     this.contentChange = this.contentChange.bind(this);
     this.buttonPressed = this.buttonPressed.bind(this);
+  }
+
+  IsLoggedIn() {
+    fetch("/api/isLoggedIn")
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.data);
+      })
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          logged: true,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          logged: false,
+        })
+      });
   }
 
   contentChange(e) {
@@ -55,6 +78,9 @@ export default class NewPost extends Component {
   }
 
   render() {
+    if (this.state.logged === false) {
+      return <h5 id="error-message">You're not logged in</h5>;
+    }
     return (
       <div className="mt-3">
         <h1>New Post</h1>

@@ -7,10 +7,33 @@ export default class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      logged: "",
     };
+    this.IsLoggedIn();
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
     this.buttonPressed = this.buttonPressed.bind(this);
+  }
+
+  IsLoggedIn() {
+    fetch("/api/isLoggedIn")
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.data);
+      })
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          logged: true,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          logged: false,
+        })
+      });
   }
 
   usernameChange(e) {
@@ -51,6 +74,14 @@ export default class Login extends Component {
   }
 
   render() {
+    if (this.state.logged === true)
+    {
+      return (
+        <div>
+          <h5 id="error-message">You're already logged in</h5>
+        </div>
+      )
+    }
     return (
       <div class="mr-4 ml-4">
         <div class="login mt-5">

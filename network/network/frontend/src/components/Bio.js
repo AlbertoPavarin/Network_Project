@@ -23,7 +23,7 @@ export default class Bio extends Component {
     this.state = {
       firstName: "",
       lastName: "",
-      logged: false,
+      logged: "",
     };
     this.IsLoggedIn();
     this.firstNameChange = this.firstNameChange.bind(this);
@@ -46,7 +46,9 @@ export default class Bio extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        this.setState({
+          logged: false,
+        })
       });
   }
 
