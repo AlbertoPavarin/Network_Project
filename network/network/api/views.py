@@ -24,7 +24,6 @@ class UserView(generics.CreateAPIView):
 
 def isLoggedIn(request):
     if request.method == 'GET':
-        print(request.user)
         if len(request.user.username) > 0:
             return JsonResponse({'Success': f'{request.user.username}'}, status=status.HTTP_200_OK)
         else:
@@ -206,8 +205,9 @@ class FollowView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             following = serializer.data.get('following')
+            print(following)
             user = User.objects.filter(pk=following)
-            print(user[0])
+            print(user)
             if len(user) > 0:
                 follow = Follower(follower=request.user, following=user[0])
                 follow.save()

@@ -42,4 +42,4 @@ class BioSerializer(serializers.ModelSerializer):
 class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follower
-        fields = ('follower', 'following')
+        fields = ('following', )

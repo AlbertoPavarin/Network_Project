@@ -1,18 +1,39 @@
 import React, { Component } from 'react';
 
+// https://docs.djangoproject.com/en/1.11/ref/csrf/#ajax
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
 export default class Profile extends Component{
     constructor(props){
         super(props);
         this.state = {
+            user_id: 0,
             username: "",
             date_joined: "",
             last_name: "",
             first_name: "",
             info: "",
+            is_following: "",
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
         this.getUserPosts();
+        this.editBioPressed = this.editBioPressed.bind(this);
+        this.followPressed = this.followPressed.bind(this);
         this.months = {
             0: "January",
             1: "February",
@@ -27,7 +48,6 @@ export default class Profile extends Component{
             10: "November",
             11: "December",
           };
-        this.editBioPressed = this.editBioPressed.bind(this);
     }
 
     getUserDetails(){
@@ -41,13 +61,14 @@ export default class Profile extends Component{
         .then((data) => {
             const d = new Date(data.date_joined)
             this.setState({
+                user_id: data.id,
                 username: data.username,
                 date_joined: `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`,
                 first_name: data.first_name,
                 last_name: data.last_name,
                 info: data.info,
             });
-            console.log(data.info);
+            console.log(data.id);
             this.isLoggedIn();
         })
         .catch((error) => {
@@ -66,7 +87,6 @@ export default class Profile extends Component{
             throw new Error(response.data);
         })
         .then((data) => {
-            console.log(this.state.username);
             if (this.state.username == data['Success'])
             {
                 const btnDiv = document.createElement('div');
@@ -76,10 +96,13 @@ export default class Profile extends Component{
             }
             else
             {
-                const btnFolBtn = document.createElement('div');
-                btnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Follow">`;
-                btnFolBtn.onclick=this.editBioPressed;
-                document.querySelector('#un-follow-btn').appendChild(btnFolBtn);
+                if (!this.state.is_following)
+                {
+                    const btnFolBtn = document.createElement('div');
+                    btnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Follow">`;
+                    btnFolBtn.onclick=this.followPressed;
+                    document.querySelector('#un-follow-btn').appendChild(btnFolBtn);
+                }
             }
         })
     }
@@ -106,6 +129,32 @@ export default class Profile extends Component{
     {
         e.preventDefault();
         window.location.href = "/EditBio"
+    }
+
+    followPressed(e){
+        e.preventDefault();
+        console.log(this.state.user_id);
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({
+              following: this.state.user_id,
+            }),
+          };
+        fetch('/api/create-follower', requestOptions)
+        .then((response) => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error(response.data);
+          })
+        .then((data) => console.log(data))
+        .catch((error) => {
+            document.querySelector('#user-container').innerHTML = "Error";
+        })
     }
 
     render(){
