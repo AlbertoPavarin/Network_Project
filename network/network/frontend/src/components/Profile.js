@@ -6,6 +6,9 @@ export default class Profile extends Component{
         this.state = {
             username: "",
             date_joined: "",
+            last_name: "",
+            first_name: "",
+            info: "",
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
@@ -40,7 +43,11 @@ export default class Profile extends Component{
             this.setState({
                 username: data.username,
                 date_joined: `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`,
+                first_name: data.first_name,
+                last_name: data.last_name,
+                info: data.info,
             });
+            console.log(data.info);
             this.isLoggedIn();
         })
         .catch((error) => {
@@ -62,10 +69,17 @@ export default class Profile extends Component{
             console.log(this.state.username);
             if (this.state.username == data['Success'])
             {
-                const btnDiv = document.createElement('div')
+                const btnDiv = document.createElement('div');
                 btnDiv.innerHTML = `<input type="button" class="btn btn-primary" value="Edit Bio">`;
                 btnDiv.onclick=this.editBioPressed;
                 document.querySelector('#edit-bio-btn').appendChild(btnDiv);
+            }
+            else
+            {
+                const btnFolBtn = document.createElement('div');
+                btnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Follow">`;
+                btnFolBtn.onclick=this.editBioPressed;
+                document.querySelector('#un-follow-btn').appendChild(btnFolBtn);
             }
         })
     }
@@ -98,9 +112,15 @@ export default class Profile extends Component{
         return (
             <div id='user-container'>
                 <p>Username: {this.state.username}</p>
-                <p className="text-secondary">Joined: {this.state.date_joined}</p>
+                <div id="un-follow-btn"></div>
+                <hr />
+                <h5>Bio:</h5>
+                <p>{this.state.first_name} {this.state.last_name}</p>
+                <p>{this.state.info}</p>
                 <div id="edit-bio-btn">
                 </div>
+                <hr />
+                <p className="text-secondary">Joined: {this.state.date_joined}</p>
                 <div className='post-container'>
                     <hr />
                 </div>

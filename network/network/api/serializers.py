@@ -1,13 +1,13 @@
 from pyexpat import model
 
 from attr import fields
-from .models import Comment, Post, User
+from .models import Comment, Follower, Post, User
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'password', 'username', 'email', 'date_joined')
+        fields = ('id', 'password', 'username', 'email', 'date_joined', 'first_name', 'last_name', 'info')
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,4 +37,9 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class BioSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name')
+        fields = ('first_name', 'last_name', 'info')
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follower
+        fields = ('follower', 'following')

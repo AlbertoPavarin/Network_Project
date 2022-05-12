@@ -15,4 +15,5 @@ urlpatterns = [
     path('create-comment', CreateCommentView.as_view()),
     path('get-post/', GetPost.as_view()),
     path('edit-bio/', EditBio.as_view()),
+    path('create-follower', FollowView.as_view()),
 ]

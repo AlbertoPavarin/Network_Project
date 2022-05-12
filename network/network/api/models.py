@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    info = models.CharField(blank=True, max_length=512)
 
     def __str__(self):
         return f"{self.username}"
@@ -23,3 +23,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.id}'
+
+class Follower(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follower")
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
+
+    def __str__(self):
+        return f'{self.follower} follows {self.following}'

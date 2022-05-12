@@ -23,11 +23,13 @@ export default class Bio extends Component {
     this.state = {
       firstName: "",
       lastName: "",
+      info: "",
       logged: "",
     };
     this.IsLoggedIn();
     this.firstNameChange = this.firstNameChange.bind(this);
     this.lastNameChange = this.lastNameChange.bind(this);
+    this.infoChange = this.infoChange.bind(this);
     this.buttonPressed = this.buttonPressed.bind(this);
   }
 
@@ -64,6 +66,12 @@ export default class Bio extends Component {
         })
   }
 
+  infoChange(e){
+    this.setState({
+      info: e.target.value,
+    })
+  }
+
   buttonPressed(e){
       e.preventDefault();
       console.log(`${this.state.firstName} ${this.state.lastName}`);
@@ -76,6 +84,7 @@ export default class Bio extends Component {
         body: JSON.stringify({
           first_name: this.state.firstName,
           last_name: this.state.lastName,
+          info: this.state.info,
         }),
       };
       fetch('/api/edit-bio/', requestOptions)
@@ -95,14 +104,18 @@ export default class Bio extends Component {
         <div className="login mt-5">
             <h1>Bio</h1>
             <h5 id="error-message"></h5>
-            <label className="mt-4" htmlFor="username">
+            <label className="mt-4" htmlFor="first-name">
               First Name
             </label>
-            <input name="username" type="text" className="form-control w-100" onChange={this.firstNameChange}/>
-            <label className="mt-4" htmlFor="password">
+            <input name="first-name" type="text" className="form-control w-100" onChange={this.firstNameChange}/>
+            <label className="mt-4" htmlFor="last-name">
               Last Name
             </label>
-            <input name="password" type="password" className="form-control w-100" onChange={this.lastNameChange}/>
+            <input name="last-name" type="text" className="form-control w-100" onChange={this.lastNameChange}/>
+            <label className="mt-4" htmlFor="info">
+              Info
+            </label>
+            <input name="info" type="text" className="form-control w-100" onChange={this.infoChange}/>
             <input type="Button" className="btn btn-primary mt-4" value="Edit Bio" onClick={this.buttonPressed} />
         </div>
       </div>

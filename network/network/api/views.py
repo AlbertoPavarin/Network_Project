@@ -190,10 +190,28 @@ class EditBio(APIView):
         if serializer.is_valid():
             firstName = serializer.data.get('first_name')
             lastName = serializer.data.get('last_name')
+            info = serializer.data.get('info')
             user = User.objects.filter(pk=request.user.id)
             if len(user) > 0:
-                user.update(last_name=lastName, first_name=firstName)
+                user.update(last_name=lastName, first_name=firstName, info=info)
                     
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+
+class FollowView(APIView):
+    serializer_class = FollowSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            following = serializer.data.get('following')
+            user = User.objects.filter(pk=following)
+            print(user[0])
+            if len(user) > 0:
+                follow = Follower(follower=request.user, following=user[0])
+                follow.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'Bad request': 'No user'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
