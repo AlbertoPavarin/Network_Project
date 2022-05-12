@@ -215,3 +215,19 @@ class FollowView(APIView):
             return Response({'Bad request': 'No user'}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class IsFollowing(APIView):
+    serializer_class = FollowSerializer
+    lookup_url_kwarg = 'username'
+
+    def get(self, request, format=None):
+        username = request.GET.get(self.lookup_url_kwarg) # User to control if he is followed by the current user
+        if username is not None:
+            user = User.objects.filter(id=request.user.id)
+            for user in user[0].follower.all():
+                print(str(user))
+                if username == str(user):
+                    return Response({'Found': True}, status=status.HTTP_200_OK)
+            return Response({'Not Found': 'User not found beetween the followers'})
+
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)

@@ -27,7 +27,6 @@ export default class Profile extends Component{
             last_name: "",
             first_name: "",
             info: "",
-            is_following: "",
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
@@ -96,13 +95,24 @@ export default class Profile extends Component{
             }
             else
             {
-                if (!this.state.is_following)
-                {
-                    const btnFolBtn = document.createElement('div');
-                    btnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Follow">`;
-                    btnFolBtn.onclick=this.followPressed;
-                    document.querySelector('#un-follow-btn').appendChild(btnFolBtn);
-                }
+                fetch(`/api/isFollowing/?username=${this.state.username}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data['Found'])
+                    { 
+                        const btnFolBtn = document.createElement('div');
+                        btnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Follow">`;
+                        btnFolBtn.onclick=this.followPressed;
+                        document.querySelector('#un-follow-btn').appendChild(btnFolBtn);
+                    }
+                    else
+                    {
+                        const btnUnFolBtn = document.createElement('div');
+                        btnUnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Unfollow">`;
+                        //btnUnFolBtn.onclick=this.followPressed;
+                        document.querySelector('#un-follow-btn').appendChild(btnUnFolBtn);
+                    }
+                })
             }
         })
     }
@@ -124,7 +134,7 @@ export default class Profile extends Component{
             postDiv.addEventListener('click', () => window.location.href = `/Post/${post['id']}`);
         }))
     }
-
+    
     editBioPressed(e)
     {
         e.preventDefault();
@@ -151,7 +161,10 @@ export default class Profile extends Component{
             }
             throw new Error(response.data);
           })
-        .then((data) => console.log(data))
+        .then((data) => {
+            console.log(data);
+            window.location.reload();
+        })
         .catch((error) => {
             document.querySelector('#user-container').innerHTML = "Error";
         })
