@@ -1,15 +1,12 @@
 import json
-from django.db import IntegrityError
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse, QueryDict
+from django.http import HttpResponseRedirect, JsonResponse
 from rest_framework import generics
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
-from .models import User
+from django.contrib.auth import authenticate, login
+from .models import *
 from rest_framework import status
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -205,9 +202,7 @@ class FollowView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             following = serializer.data.get('following')
-            print(following)
             user = User.objects.filter(pk=following)
-            print(user)
             if len(user) > 0:
                 follow = Follower(follower=request.user, following=user[0])
                 follow.save()
@@ -225,9 +220,44 @@ class IsFollowing(APIView):
         if username is not None:
             user = User.objects.filter(id=request.user.id)
             for user in user[0].follower.all():
-                print(str(user))
                 if username == str(user):
                     return Response({'Found': True}, status=status.HTTP_200_OK)
-            return Response({'Not Found': 'User not found beetween the followers'})
+            return Response({'Not Found': 'User not found beetween the followers'}, status=status.HTTP_404_NOT_FOUND)
 
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class UnfollowView(APIView):
+    serializer_class = FollowSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            following = serializer.data.get('following')
+            follow = Follower.objects.filter(follower=request.user.id).filter(following=following)
+            if len(follow) > 0:
+                follow.delete()
+                return Response({'Unfollowed': 'User Unfollowed'}, status=status.HTTP_200_OK)
+            return Response({'Not Found': 'Follow not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'Invalid':'Invalid'}, status=status.HTTP_400_BAD_REQUEST)
+
+class GetFollowerNumberView(APIView):
+    serializer_class = FollowerSerializer
+
+    def get(self, request, format=None):
+        followerNumber = Follower.objects.filter(follower=request.user).count()
+        return Response({'Count': followerNumber})
+
+class GetFollowingNumberView(APIView):
+    serializer_class = FollowSerializer
+    lookup_url_kwarg = 'username'
+
+    def get(self, request, format=None):
+        username = request.GET.get(self.lookup_url_kwarg)
+        if username is not None:
+            user = User.objects,filter(username=username)
+            if len(user) > 0:
+                followingNumber = Follower.objects.filter(following=user[0]).count()
+                return Response({'Count': followingNumber})
+            return Response({'Not Found': 'User passed not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)

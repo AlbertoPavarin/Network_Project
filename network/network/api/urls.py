@@ -17,4 +17,7 @@ urlpatterns = [
     path('edit-bio/', EditBio.as_view()),
     path('create-follower', FollowView.as_view()),
     path('isFollowing/', IsFollowing.as_view()),
+    path('unfollow', UnfollowView.as_view()),
+    path('get-follower-count/', GetFollowerNumberView.as_view()),
+    path('get-following-count/', GetFollowingNumberView.as_view()),
 ]

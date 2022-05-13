@@ -27,12 +27,16 @@ export default class Profile extends Component{
             last_name: "",
             first_name: "",
             info: "",
+            followerNumber: 0,
+            followingNumber: 0,
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
+        this.getFollowingNumber();
         this.getUserPosts();
         this.editBioPressed = this.editBioPressed.bind(this);
         this.followPressed = this.followPressed.bind(this);
+        this.unfollowPressed = this.unfollowPressed.bind(this);
         this.months = {
             0: "January",
             1: "February",
@@ -67,8 +71,8 @@ export default class Profile extends Component{
                 last_name: data.last_name,
                 info: data.info,
             });
-            console.log(data.id);
             this.isLoggedIn();
+            this.getFollowernumber();
         })
         .catch((error) => {
             const errorDiv = document.querySelector('#user-container');
@@ -109,7 +113,7 @@ export default class Profile extends Component{
                     {
                         const btnUnFolBtn = document.createElement('div');
                         btnUnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Unfollow">`;
-                        //btnUnFolBtn.onclick=this.followPressed;
+                        btnUnFolBtn.onclick=this.unfollowPressed;
                         document.querySelector('#un-follow-btn').appendChild(btnUnFolBtn);
                     }
                 })
@@ -170,12 +174,59 @@ export default class Profile extends Component{
         })
     }
 
+    unfollowPressed(e){
+        e.preventDefault();
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({
+              following: this.state.user_id,
+            }),
+          };
+        fetch('/api/unfollow', requestOptions)
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.data);
+            })
+        .then((data) => window.location.reload())
+        .catch((error) => console.log(error))
+    }
+
+    getFollowernumber(){
+        fetch('/api/get-follower-count')
+        .then((response) => response.json())
+        .then((data) => {
+            this.setState({
+                followerNumber: data['Count']
+            })
+        })
+    }
+
+    getFollowingNumber(){
+        console.log(this.state.username);
+        fetch(`/api/get-following-count/?username=${this.state.username}`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data)
+            this.setState({
+                followingNumber: data['Count']
+            })
+        })
+    }
+
     render(){
         return (
             <div id='user-container'>
                 <p>Username: {this.state.username}</p>
                 <div id="un-follow-btn"></div>
                 <hr />
+                <b>Followers: {this.state.followerNumber}</b><br />
+                <b>Following: {this.state.followingNumber}</b><br /><br />
                 <h5>Bio:</h5>
                 <p>{this.state.first_name} {this.state.last_name}</p>
                 <p>{this.state.info}</p>

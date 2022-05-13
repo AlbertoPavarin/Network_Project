@@ -91,7 +91,7 @@ export default class Login extends Component {
             <label class="mt-4" for="username">
               Username
             </label>
-            <input name="username" type="text" class="form-control w-100" onChange={this.usernameChange}/>
+            <input name="username" type="text" class="form-control w-100" autoComplete="Off" onChange={this.usernameChange}/>
             <label class="mt-4" for="password">
               Password
             </label>
