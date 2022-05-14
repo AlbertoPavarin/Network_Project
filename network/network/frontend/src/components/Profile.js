@@ -32,7 +32,8 @@ export default class Profile extends Component{
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
-        this.getFollowingNumber();
+        this.followingPressed = this.followingPressed.bind(this);
+        this.followerPressed = this.followerPressed.bind(this);
         this.getUserPosts();
         this.editBioPressed = this.editBioPressed.bind(this);
         this.followPressed = this.followPressed.bind(this);
@@ -73,6 +74,7 @@ export default class Profile extends Component{
             });
             this.isLoggedIn();
             this.getFollowernumber();
+            this.getFollowingNumber();
         })
         .catch((error) => {
             const errorDiv = document.querySelector('#user-container');
@@ -198,7 +200,7 @@ export default class Profile extends Component{
     }
 
     getFollowernumber(){
-        fetch('/api/get-follower-count')
+        fetch('/api/get-follower-count/' + '?username=' + this.usernameToFind)
         .then((response) => response.json())
         .then((data) => {
             this.setState({
@@ -208,15 +210,21 @@ export default class Profile extends Component{
     }
 
     getFollowingNumber(){
-        console.log(this.state.username);
-        fetch(`/api/get-following-count/?username=${this.state.username}`)
+        fetch(`/api/get-following-count/` + `?username=` + this.usernameToFind)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data)
             this.setState({
                 followingNumber: data['Count']
             })
         })
+    }
+
+    followingPressed(){
+        window.location.href = '/User/Following/' + this.usernameToFind;
+    }
+
+    followerPressed(){
+        window.location.href = '/User/Follower/' + this.usernameToFind;
     }
 
     render(){
@@ -225,8 +233,8 @@ export default class Profile extends Component{
                 <p>Username: {this.state.username}</p>
                 <div id="un-follow-btn"></div>
                 <hr />
-                <b>Followers: {this.state.followerNumber}</b><br />
-                <b>Following: {this.state.followingNumber}</b><br /><br />
+                <b onClick={this.followerPressed}>Followers: {this.state.followerNumber}</b><br />
+                <b onClick={this.followingPressed}>Following: {this.state.followingNumber}</b><br /><br />
                 <h5>Bio:</h5>
                 <p>{this.state.first_name} {this.state.last_name}</p>
                 <p>{this.state.info}</p>

@@ -243,10 +243,17 @@ class UnfollowView(APIView):
 
 class GetFollowerNumberView(APIView):
     serializer_class = FollowerSerializer
+    lookup_url_kwarg = 'username'
 
     def get(self, request, format=None):
-        followerNumber = Follower.objects.filter(follower=request.user).count()
-        return Response({'Count': followerNumber})
+        username = request.GET.get(self.lookup_url_kwarg)
+        if username is not None:
+            user = User.objects.filter(username=username)
+            if len(user) > 0:
+                followerNumber = Follower.objects.filter(following=user[0]).count()
+                return Response({'Count': followerNumber})
+            return Response({'Not Found': 'User passed not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
 
 class GetFollowingNumberView(APIView):
     serializer_class = FollowSerializer
@@ -255,9 +262,37 @@ class GetFollowingNumberView(APIView):
     def get(self, request, format=None):
         username = request.GET.get(self.lookup_url_kwarg)
         if username is not None:
-            user = User.objects,filter(username=username)
+            user = User.objects.filter(username=username)
             if len(user) > 0:
-                followingNumber = Follower.objects.filter(following=user[0]).count()
+                followingNumber = Follower.objects.filter(follower=user[0]).count()
                 return Response({'Count': followingNumber})
             return Response({'Not Found': 'User passed not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class GetFollowingUsersView(APIView):
+    serializer_class = FollowSerializer
+    lookup_url_kwarg = 'username'
+
+    def get(self, request, format=None):
+        username = request.GET.get(self.lookup_url_kwarg)
+        if username is not None:
+            user = User.objects.filter(username=username)
+            if len(user) > 0:
+                followingUsers = Follower.objects.filter(follower=user[0])
+                return Response({'Following': FollowSerializer(followingUsers, many=True).data}, status=status.HTTP_200_OK)
+            return Response({'Not found': 'User passed not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class GetFollowerUsersView(APIView):
+    serializer_class = FollowerSerializer
+    lookup_url_kwarg = 'username'
+
+    def get(self, request, format=None):
+        username = request.GET.get(self.lookup_url_kwarg)
+        if username is not None:
+            user = User.objects.filter(username=username)
+            if len(user) > 0:
+                followerUsers = Follower.objects.filter(following=user[0])
+                return Response({'Followers': FollowerSerializer(followerUsers, many=True).data}, status=status.HTTP_200_OK)
+            return Response({'Not found': 'User passed not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)

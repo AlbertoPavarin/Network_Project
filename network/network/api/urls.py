@@ -20,4 +20,6 @@ urlpatterns = [
     path('unfollow', UnfollowView.as_view()),
     path('get-follower-count/', GetFollowerNumberView.as_view()),
     path('get-following-count/', GetFollowingNumberView.as_view()),
+    path('get-following-users/', GetFollowingUsersView.as_view()),
+    path('get-follower-users/', GetFollowerUsersView.as_view()),
 ]
