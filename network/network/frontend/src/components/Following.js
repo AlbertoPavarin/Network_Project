@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-//Aggiungere gestione errori
+
 export default class Following extends Component {
     constructor(props) {
       super(props);
@@ -23,11 +23,21 @@ export default class Following extends Component {
                 })
             });
         })
+        .catch((error) => {
+            const errorDiv = document.querySelector('.following-div');
+            errorDiv.id = "error-message";
+            errorDiv.innerHTML = 'Error: User doesn\'t exist';
+        })
     }
 
     render(){
         return (
             <div>
+                <div id='username'>
+                    <h1>{this.usernameToFind}</h1>
+                </div>
+                <hr />
+                <h3>Following</h3>
                 <div className="following-div">
                 </div>
             </div>

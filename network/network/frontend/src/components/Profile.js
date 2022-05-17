@@ -94,10 +94,11 @@ export default class Profile extends Component{
         .then((data) => {
             if (this.state.username == data['Success'])
             {
-                const btnDiv = document.createElement('div');
-                btnDiv.innerHTML = `<input type="button" class="btn btn-primary" value="Edit Bio">`;
-                btnDiv.onclick=this.editBioPressed;
-                document.querySelector('#edit-bio-btn').appendChild(btnDiv);
+                const btnEdit = document.createElement('button');
+                btnEdit.classList = "btn btn-primary";
+                btnEdit.innerHTML = "Edit Bio";
+                btnEdit.onclick = this.editBioPressed; 
+                document.querySelector('#edit-bio-btn').appendChild(btnEdit);
             }
             else
             {
@@ -106,15 +107,17 @@ export default class Profile extends Component{
                 .then((data) => {
                     if (!data['Found'])
                     { 
-                        const btnFolBtn = document.createElement('div');
-                        btnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Follow">`;
+                        const btnFolBtn = document.createElement('button');
+                        btnFolBtn.classList = 'btn btn-primary';
+                        btnFolBtn.innerHTML = `Follow`;
                         btnFolBtn.onclick=this.followPressed;
                         document.querySelector('#un-follow-btn').appendChild(btnFolBtn);
                     }
                     else
                     {
-                        const btnUnFolBtn = document.createElement('div');
-                        btnUnFolBtn.innerHTML = `<input type="button" class="btn btn-primary" value="Unfollow">`;
+                        const btnUnFolBtn = document.createElement('button');
+                        btnUnFolBtn.classList = 'btn btn-primary';
+                        btnUnFolBtn.innerHTML = `Unfollow`;
                         btnUnFolBtn.onclick=this.unfollowPressed;
                         document.querySelector('#un-follow-btn').appendChild(btnUnFolBtn);
                     }
@@ -230,20 +233,23 @@ export default class Profile extends Component{
     render(){
         return (
             <div id='user-container'>
-                <p>Username: {this.state.username}</p>
+                <div id='username'>
+                    <h1>{this.state.username}</h1>
+                </div>
                 <div id="un-follow-btn"></div>
                 <hr />
                 <b onClick={this.followerPressed}>Followers: {this.state.followerNumber}</b><br />
                 <b onClick={this.followingPressed}>Following: {this.state.followingNumber}</b><br /><br />
-                <h5>Bio:</h5>
+                <hr />
                 <p>{this.state.first_name} {this.state.last_name}</p>
                 <p>{this.state.info}</p>
                 <div id="edit-bio-btn">
                 </div>
                 <hr />
                 <p className="text-secondary">Joined: {this.state.date_joined}</p>
-                <div className='post-container'>
-                    <hr />
+                <hr />
+                <h1>Posts</h1>
+                <div className='post-container'>    
                 </div>
             </div>
         )

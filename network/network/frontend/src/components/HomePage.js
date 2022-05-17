@@ -49,8 +49,8 @@ export default class HomePage extends Component {
     return (
       <div>
         <h1>Posts</h1>
+        <hr/>
         <div className="post-container">
-          <hr />
         </div>
       </div>
     );
