@@ -91,12 +91,12 @@ export default class Login extends Component {
             <label class="mt-4" for="username">
               Username
             </label>
-            <input name="username" type="text" class="form-control w-100" autoComplete="Off" onChange={this.usernameChange}/>
+            <input name="username" type="text" class="form-control w-100" autoComplete="Off" onChange={this.usernameChange} placeholder="Enter your Username"/>
             <label class="mt-4" for="password">
               Password
             </label>
-            <input name="password" type="password" class="form-control w-100" onChange={this.passwordChange}/>
-            <input type="Submit" class="btn btn-primary mt-4" value="Login" onClick={this.buttonPressed} />
+            <input name="password" type="password" class="form-control w-100" onChange={this.passwordChange} placeholder="Enter your Password"/>
+            <input type="Submit" class="sub-btn mt-4" value="Login" onClick={this.buttonPressed} />
           </form>
         </div>
       </div>

@@ -3,6 +3,68 @@
     width: 50%;
     padding: 10px;
     text-align: center;
+    border-style: solid;
+    border-radius: 25px;
+    padding: 30px;
+  }
+
+
+
+.login input, .register input{
+  width: 80%;
+  box-sizing: border-box;
+	border: none;
+  font-size: 1.3rem;
+  padding-left: 1.5rem;
+  padding-bottom: 1rem;
+  box-shadow: inset 0px -3px 0px 0px rgba(187,187,187,0.2);
+  transition: box-shadow 0.2s ease-in;
+}
+
+.login input:focus, .register input:focus{
+  box-shadow: inset 0px -3px 0px 0px rgba(34,193,195,0.7);
+   outline: none;
+}
+
+.login label, .register label{
+  align-self: start;
+  padding-bottom: 0.5rem;
+  color: rgba(170,170,170,0.9);
+  font-size: 20px;
+}
+
+.login input::-webkit-input-placeholder,
+.roregister input::-webkit-input-placeholder{
+  opacity: 1;
+  transition: opacity 0.25s ease-out;
+}
+
+.login input:hover::-webkit-input-placeholder,
+.login input:focus::-webkit-input-placeholder,
+.register input:hover::-webkit-input-placeholder,
+.register input:focus::-webkit-input-placeholder{
+  opacity: 0;
+}
+
+.register .sub-btn,
+.login .sub-btn{
+  border-radius: 25px;
+  width: 80%;
+  height: 40px;
+  font-size: 1.3rem;
+  color: white;
+  font-weight: 700;
+  background: rgb(34,193,195);
+  background-color: #40434e;
+  border: 0px;
+  cursor: pointer;
+  transition: opacity 0.25s ease-out;
+}
+
+  @media screen and (max-width: 990px) {
+    .login {
+       width: 100%;
+    }
   }
 
 #error-message{
@@ -46,4 +108,20 @@
 
 #username{
   text-align: center;
+}
+
+#un-follow-btn{
+  text-align: center;
+}
+
+.right{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 990px) {
+  .right {
+     display: block;
+  }
 }

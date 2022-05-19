@@ -108,7 +108,7 @@ export default class Profile extends Component{
                     if (!data['Found'])
                     { 
                         const btnFolBtn = document.createElement('button');
-                        btnFolBtn.classList = 'btn btn-primary';
+                        btnFolBtn.classList = 'btn btn-primary w-25';
                         btnFolBtn.innerHTML = `Follow`;
                         btnFolBtn.onclick=this.followPressed;
                         document.querySelector('#un-follow-btn').appendChild(btnFolBtn);
@@ -116,7 +116,7 @@ export default class Profile extends Component{
                     else
                     {
                         const btnUnFolBtn = document.createElement('button');
-                        btnUnFolBtn.classList = 'btn btn-primary';
+                        btnUnFolBtn.classList = 'btn btn-primary w-25';
                         btnUnFolBtn.innerHTML = `Unfollow`;
                         btnUnFolBtn.onclick=this.unfollowPressed;
                         document.querySelector('#un-follow-btn').appendChild(btnUnFolBtn);
@@ -233,7 +233,7 @@ export default class Profile extends Component{
     render(){
         return (
             <div id='user-container'>
-                <div id='username'>
+                <div id='username' className='mb-4'>
                     <h1>{this.state.username}</h1>
                 </div>
                 <div id="un-follow-btn"></div>

@@ -117,7 +117,7 @@ export default class Register extends Component {
                     <input name="password" type="password" className="form-control w-100" onChange={this.passwordChange}/>
                     <label className="mt-4" for="passwordConf">Password Confermation</label>
                     <input name="passwordConf" type="password" className="form-control w-100" onChange={this.passwordConfermationChange}/>
-                    <input type="Submit" className="btn btn-primary mt-4" value="Register" onClick={this.buttonPressed}/>
+                    <input type="Submit" className="sub-btn mt-4" value="Register" onClick={this.buttonPressed}/>
                 </form>       
             </div>          
         );

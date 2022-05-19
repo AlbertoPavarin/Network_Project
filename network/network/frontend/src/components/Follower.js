@@ -12,6 +12,10 @@ export default class Follower extends Component {
         fetch('/api/get-follower-users/' + '?username=' + this.usernameToFind)
         .then((response) => response.json())
         .then((data) => {
+            if (data['Followers'].length == 0)
+            {
+                document.querySelector('.follower-div').innerHTML = "No Followers";
+            }
             data['Followers'].forEach(follower => {
                 fetch('/api/get-user-id/' + '?id=' + follower['follower'])
                 .then((response) => response.json())
