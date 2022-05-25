@@ -72,6 +72,26 @@ html, .body, #main, .wrapper{
     }
   }
 
+  @media screen and (max-width: 660px) {
+    .content-wrapper {
+       border-style: none;
+       border-right: #e7e6df;
+    }
+    .comment-icon{
+      margin-top: 20px;
+    }
+  }
+
+.comment-icon{
+  font-size: 30px;
+}
+
+.content-wrapper{
+  border-style: solid;
+  border-top: #000;
+  border-bottom: #000;
+}
+
 #error-message{
   color: red;
   font-size: 25px;
@@ -87,7 +107,6 @@ html, .body, #main, .wrapper{
 }
 
 .post, .comment{
-  padding: 20px;
   border-style: solid;
   border-width: thin;
   border-color: #ccc;
@@ -100,6 +119,10 @@ html, .body, #main, .wrapper{
 
 .timestamp, .comments-text{
   font-size: 13px;
+}
+
+.post-in{
+  margin-left: 0%;
 }
 
 .post-view{
