@@ -90,7 +90,8 @@ export default class NewPost extends Component {
           <textarea
             name="content"
             type="text"
-            className="form-control content"
+            id="content"
+            className="form-control"
             onChange={this.contentChange}
           />
           <input

@@ -22,7 +22,7 @@
     crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="body">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">Efesto</a>
     {% if user.is_authenticated %}
@@ -55,8 +55,14 @@
       </ul>
     </div>
   </nav>
-  <div class="mr-4 ml-4">
-    <div id="main">
+  <!--<ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li style="float:right"><a class="active" href="#about">About</a></li>
+  </ul>!-->
+  <div class="wrapper">
+    <div id="main" class="mr-4 ml-4">
       <div id="app"></div>
     </div>
     <script src="{% static 'frontend/main.js' %}"></script>

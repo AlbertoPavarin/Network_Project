@@ -110,13 +110,13 @@ export default class Register extends Component {
                 <h5 id="error-message"></h5>
                 <form className="mt-4">   
                     <label for="username">Username</label>
-                    <input name="username" type="text" onChange={this.usernameChange} class="form-control w-100" />
+                    <input name="username" type="text" onChange={this.usernameChange} placeholder="Enter your Username" class="form-control w-100" />
                     <label className="mt-4" for="email">Email</label>
-                    <input name="email" type="email" className="form-control w-100" onChange={this.emailChange}/>
+                    <input name="email" type="email" className="form-control w-100" onChange={this.emailChange} placeholder="Enter your Email"/>
                     <label className="mt-4" for="password">Password</label>
-                    <input name="password" type="password" className="form-control w-100" onChange={this.passwordChange}/>
+                    <input name="password" type="password" className="form-control w-100" onChange={this.passwordChange} placeholder="Enter your Password" />
                     <label className="mt-4" for="passwordConf">Password Confermation</label>
-                    <input name="passwordConf" type="password" className="form-control w-100" onChange={this.passwordConfermationChange}/>
+                    <input name="passwordConf" type="password" className="form-control w-100" onChange={this.passwordConfermationChange} placeholder="Enter your Password again" />
                     <input type="Submit" className="sub-btn mt-4" value="Register" onClick={this.buttonPressed}/>
                 </form>       
             </div>          

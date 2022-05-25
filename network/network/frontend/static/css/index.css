@@ -8,20 +8,24 @@
     padding: 30px;
   }
 
-
+html, .body, #main, .wrapper{
+  background-color: #e7e6df;
+}
 
 .login input, .register input{
+  background-color: #e7e6df;
   width: 80%;
   box-sizing: border-box;
 	border: none;
   font-size: 1.3rem;
   padding-left: 1.5rem;
   padding-bottom: 1rem;
-  box-shadow: inset 0px -3px 0px 0px rgba(187,187,187,0.2);
+  box-shadow: inset 0px -3px 0px 0px rgba(100,100,100,0.2);
   transition: box-shadow 0.2s ease-in;
 }
 
 .login input:focus, .register input:focus{
+  background-color: #e7e6df;
   box-shadow: inset 0px -3px 0px 0px rgba(34,193,195,0.7);
    outline: none;
 }
@@ -29,12 +33,13 @@
 .login label, .register label{
   align-self: start;
   padding-bottom: 0.5rem;
-  color: rgba(170,170,170,0.9);
+  color: rgba(150,150,150);
   font-size: 20px;
 }
 
 .login input::-webkit-input-placeholder,
 .roregister input::-webkit-input-placeholder{
+  font-size: 22px;
   opacity: 1;
   transition: opacity 0.25s ease-out;
 }
@@ -72,30 +77,39 @@
   font-size: 25px;
 }
 
-.content{
+.form-control{
+  background-color: #dbdaec ;
+}
+
+#content{
   min-height: 250px;
+  background-color: #ede8ed;
 }
 
 .post, .comment{
+  padding: 20px;
   border-style: solid;
   border-width: thin;
   border-color: #ccc;
+  border-radius: 50px;
   margin-bottom: 20px;
+  word-wrap: break-word;
 }
 
-.owner, .postContent, .timestamp, .comments-text, .commentator, .commentContent{
-  margin-left: 10px;
-}
+
 
 .timestamp, .comments-text{
   font-size: 13px;
 }
 
 .post-view{
+  padding: 20px;
   border-style: solid;
   border-width: thin;
   border-color: #ccc;
+  border-radius: 50px;
   margin-bottom: 20px;
+  word-wrap: break-word;
   text-align: center;
 }
 .owner-post-view{
