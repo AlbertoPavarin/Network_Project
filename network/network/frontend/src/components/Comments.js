@@ -23,11 +23,35 @@ export default class Comments extends Component {
     super(props);
     this.state = {
       content: "",
+      logged: "",
     };
     this.idToFind = window.location.pathname.split("Comments/")[1];
     this.getPostComments();
+    this.IsLoggedIn();
     this.contentChange = this.contentChange.bind(this);
     this.buttonPressed = this.buttonPressed.bind(this);
+  }
+
+  IsLoggedIn() {
+    fetch("/api/isLoggedIn")
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.data);
+      })
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          logged: true,
+        });
+        this.getFollowingUsers();
+      })
+      .catch((error) => {
+        this.setState({
+          logged: false,
+        })
+      });
   }
 
   getPostComments() {
@@ -40,7 +64,7 @@ export default class Comments extends Component {
             .then((data) => {
               comment["commentator"] = data.username;
               const commentDiv = document.createElement("div");
-              commentDiv.className = "comment";
+              commentDiv.classList = "comment p-4";
               commentDiv.innerHTML = `<b class="owner text-primary"><a href="/User/${comment["commentator"]}">${comment["commentator"]}</a></b><br>
                                         <span class="comments-text">${comment["content"]}</span><br>`;
               document.querySelector("#comments-container").appendChild(commentDiv);
@@ -78,6 +102,9 @@ export default class Comments extends Component {
   }
 
   render() {
+    if (this.state.logged === false) {
+      return <h5 id="error-message">You're not logged in</h5>;
+    }
     return (
       <div>
         <div>

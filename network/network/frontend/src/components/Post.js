@@ -40,21 +40,19 @@ export default class Post extends Component {
                 post['owner'] = owner.username;
                 const postDiv = document.createElement("div");
                 postDiv.classList = "post-view mt-5 pb-3";
-                postDiv.innerHTML =`<div class="container post-in">
-                                        <div class="row">
-                                            <div class = "col-6 col-md-3 col-xl-3">
+                postDiv.innerHTML =     `<div class="row p-4">
+                                            <div class = "col-12 col-md-3 col-xl-3">
                                                 <b class="owner-post-view text-primary"><a href="/User/${post["owner"]}">${post["owner"]}</a></b><br>
                                                 <span class="timestamp-post-view text-secondary">${post["timestamp"]}</span><br>
                                             </div>
-                                            <div class="col-6 content-wrapper">
+                                            <div class="col-12 col-md-6 col-xl-6 content-wrapper">
                                                 <span class="postContent-post-view">${post["content"]}</span><br>
                                             </div>
-                                            <div class="col-3 comment-icon">
+                                            <div class="col-12 col-md-3 col-xl-3 comment-icon">
                                                 <a href="/Comments/${post['id']}"><span class="material-icons blue-color mt-3">comment</span></a>
                                                 <a href=""><span class="material-icons">mood</span></a>
                                             </div>
-                                        </div>
-                                    </div>`;
+                                        </div>`;
                 document.querySelector("#post-container").appendChild(postDiv);
             })
         })

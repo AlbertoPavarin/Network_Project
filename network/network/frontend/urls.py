@@ -15,4 +15,5 @@ urlpatterns = [
     path('EditBio', index),
     path('User/Following/<str:username>', index),
     path('User/Follower/<str:username>', index),
+    path('Following/Posts', index),
 ]

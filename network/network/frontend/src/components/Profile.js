@@ -135,21 +135,19 @@ export default class Profile extends Component{
             post["timestamp"] = `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`;
             const postDiv = document.createElement('div');
             postDiv.className = 'post';
-            postDiv.innerHTML = `<div class="container mt-3 mb-3">
-                                    <div class = "row">
-                                        <div class = "col-6 col-md-3 col-xl-3">
-                                            <b class="owner text-primary"><a href="/User/${post["owner"]}">${post["owner"]}</a></b><br>
-                                            <span class="timestamp text-secondary">${post["timestamp"]}</span><br>
-                                        </div>
-                                        <div class="col-6 content-wrapper">
-                                            <span class="postContent">${post["content"]}</span><br>
-                                        </div>
-                                        <div class="col-3 comment-icon">
-                                            <a href="/Comments/${post['id']}"><span class="material-icons blue-color"> comment</span></a>
-                                            <a href=""><span class="material-icons">mood</span></a>
-                                        </div>
+            postDiv.innerHTML = `<div class = "row p-4">
+                                    <div class = "col-12 col-md-3 col-xl-3">
+                                        <b class="owner text-primary"><a href="/User/${post["owner"]}">${post["owner"]}</a></b><br>
+                                        <span class="timestamp text-secondary">${post["timestamp"]}</span><br>
                                     </div>
-                                </div>`;
+                                    <div class="col-12 col-md-6 col-xl-6 content-wrapper">
+                                        <span class="postContent">${post["content"]}</span><br>
+                                    </div>
+                                    <div class="col-12 col-md-3 col-xl-3 comment-icon">
+                                        <a href="/Comments/${post['id']}"><span class="material-icons blue-color"> comment</span></a>
+                                        <a href=""><span class="material-icons">mood</span></a>
+                                    </div>
+                                </div`;
             document.querySelector('.post-container').appendChild(postDiv);
             postDiv.addEventListener('click', () => window.location.href = `/Post/${post['id']}`);
         }))
