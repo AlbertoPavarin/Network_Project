@@ -45,7 +45,6 @@ export default class Comments extends Component {
         this.setState({
           logged: true,
         });
-        this.getFollowingUsers();
       })
       .catch((error) => {
         this.setState({

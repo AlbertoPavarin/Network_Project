@@ -129,7 +129,13 @@ export default class Profile extends Component{
     getUserPosts(){
         fetch('/api/get-user-posts/' + '?username=' + this.usernameToFind)
         .then((response) => response.json())
-        .then((data) => data['detail'].forEach(post => {
+        .then((data) => {
+            console.log(data['detail'].length)
+            if (data['detail'].length === 0)
+            {
+                document.querySelector('.post-container').innerHTML = "<h2>No posts</h2>";
+            }
+            data['detail'].forEach(post => {
             post['owner'] = this.usernameToFind;
             const d = new Date(post["timestamp"]);
             post["timestamp"] = `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`;
@@ -150,7 +156,7 @@ export default class Profile extends Component{
                                 </div`;
             document.querySelector('.post-container').appendChild(postDiv);
             postDiv.addEventListener('click', () => window.location.href = `/Post/${post['id']}`);
-        }))
+        })})
     }
     
     editBioPressed(e)

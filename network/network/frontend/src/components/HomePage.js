@@ -19,12 +19,21 @@ export default class HomePage extends Component {
       10: "November",
       11: "December",
     };
+    this.likeClick = this.likeClick.bind(this);
+  }
+
+  likeClick(id) {
+    console.log(id);
   }
 
   getPosts() {
     fetch("/api/posts")
       .then((response) => response.json())
       .then((data) => {
+        if (data['detail'].length === 0)
+        {
+          document.querySelector('.post-container').innerHTML = "<h2>No posts</h2>";
+        }
         data["detail"].forEach((post) => {
           fetch("/api/get-user-id/" + "?id=" + post["owner"])
             .then((response) => response.json())
@@ -32,6 +41,7 @@ export default class HomePage extends Component {
               const d = new Date(post["timestamp"]);
               post["timestamp"] = `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`;
               post["owner"] = data.username;
+              console.log(data['liked']);
               const postDiv = document.createElement("div");
               postDiv.className = "post p-4";
               postDiv.innerHTML =`  <div class = "row">
@@ -44,11 +54,12 @@ export default class HomePage extends Component {
                                       </div>
                                       <div class="col-12 col-md-3 col-xl-3 comment-icon">
                                         <a href="/Comments/${post['id']}"><span class="material-icons blue-color"> comment</span></a>
-                                        <a href=""><span class="material-icons">mood</span></a>
+                                        <div id="${post['id']}><span class="material-icons">mood</span></div>
                                       </div>
                                     </div>`;
               document.querySelector(".post-container").appendChild(postDiv);
               postDiv.addEventListener('click', () => window.location.href = `Post/${post['id']}`);
+              document.getElementById(`${post['id']}`).addEventListener('click', () => console.log(post['id']));
             });
         });
       });

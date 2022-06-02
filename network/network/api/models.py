@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -12,9 +13,13 @@ class Post(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_owner")
     content = models.CharField(max_length=512)
     timestamp = models.DateTimeField(auto_now=True)
+    liked = models.ManyToManyField(User, related_name="liked", default=None)
 
     def __str__(self):
         return f"{self.id}"
+
+    def getLike(self):
+        return f"{self.liked.all().count()}"
 
 class Comment(models.Model):
     commentator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentator")
@@ -30,3 +35,10 @@ class Follower(models.Model):
 
     def __str__(self):
         return f'{self.following}'
+
+class Like(models.Model):
+    liked_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liked_user")
+    liked_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="liked_post")
+
+    def __str__(self):
+        return f'{self.liked_user} liked {self.liked_post}'

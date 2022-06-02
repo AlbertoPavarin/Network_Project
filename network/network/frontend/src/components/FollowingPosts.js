@@ -57,7 +57,7 @@ export default class FollowingPosts extends Component {
     .then((data) => {
         if (data['Following'].length == 0)
         {
-            document.querySelector('.post-container').innerHTML = "No following";
+            document.querySelector('.post-container').innerHTML = "<h4>No following</h4>";
         }
         data['Following'].forEach(following => {
             fetch('/api/get-user-id/' + '?id=' + following['following'])
@@ -65,9 +65,12 @@ export default class FollowingPosts extends Component {
             .then((user) => {
                 fetch('/api/get-user-posts/' + '?username=' + user['username'])
                 .then((response) => response.json())
-                .then((data) => data['detail'].forEach(post => {
-                    console.log(post);
-                    console.log("sss")
+                .then((data) => {
+                    if (data['detail'].length === 0)
+                    {
+                      document.querySelector('.post-container').innerHTML = "<h4>No Posts</h4>";
+                    }
+                    data['detail'].forEach(post => {
                     post['owner'] = user["username"];
                     const d = new Date(post["timestamp"]);
                     post["timestamp"] = `${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`;
@@ -88,7 +91,7 @@ export default class FollowingPosts extends Component {
                                         </div`;
             document.querySelector('.post-container').appendChild(postDiv);
             postDiv.addEventListener('click', () => window.location.href = `/Post/${post['id']}`);
-        }))
+        })})
             })
         });
     })
