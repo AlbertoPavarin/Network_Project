@@ -9,6 +9,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'password', 'username', 'email', 'date_joined', 'first_name', 'last_name', 'info')
 
+class SearchUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', )
+
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

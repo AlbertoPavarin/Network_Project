@@ -297,16 +297,14 @@ class GetFollowerUsersView(APIView):
             return Response({'Not found': 'User passed not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
 
-"""class GetFollowingPosts(APIView):
-    serializer_class = PostSerializer
-    posts = []
+class Search(APIView):
+    serializer_class = SearchUserSerializer
 
-    def get(self, request, format=None):
-        followingUsers = Follower.objects.filter(follower=request.user)
-        for followingUser in followingUsers:
-            user = User.objects.filter(username=followingUser)
-            userPosts = Post.objects.filter(owner=user[0])
-            if len(userPosts) > 0:
-                for post in userPosts:
-                    print(post)
-        return Response({'':''})"""
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            users = User.objects.filter(username__icontains=serializer.data.get('username'))
+            print(users)
+            return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
+        return Response({'s': 's'})
+

@@ -22,5 +22,5 @@ urlpatterns = [
     path('get-following-count/', GetFollowingNumberView.as_view()),
     path('get-following-users/', GetFollowingUsersView.as_view()),
     path('get-follower-users/', GetFollowerUsersView.as_view()),
-    #path('get-following-posts', GetFollowingPosts.as_view()),
+    path('search-users', Search.as_view()),
 ]

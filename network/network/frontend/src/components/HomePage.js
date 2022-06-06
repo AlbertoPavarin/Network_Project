@@ -19,7 +19,12 @@ export default class HomePage extends Component {
       10: "November",
       11: "December",
     };
+    this.state = {
+      searchTxt: "",
+    }
     this.likeClick = this.likeClick.bind(this);
+    this.searchChange = this.searchChange.bind(this);
+    this.searchBtnPressed = this.searchBtnPressed.bind(this);
   }
 
   likeClick(id) {
@@ -70,9 +75,23 @@ export default class HomePage extends Component {
       });
   }
 
+  searchChange(e) {
+    this.setState({
+      searchTxt: e.target.value,
+    })
+  }
+
+  searchBtnPressed(e) {
+    console.log(this.state.searchTxt);
+  }
+
   render() {
     return (
       <div>
+        <label htmlFor="searchbar">Search</label>
+        <input name="searchbar" type="text" className="form-control" onChange={this.searchChange}/>
+        <input type="button" className="btn btn-primary mt-2" value="Search" onClick={this.searchBtnPressed}/>
+        <hr/>
         <h1>Posts</h1>
         <hr />
         <div className="post-container"></div>
