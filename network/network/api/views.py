@@ -308,3 +308,24 @@ class Search(APIView):
             return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
         return Response({'s': 's'})
 
+class LikePost(APIView):
+    serializer_class = LikeSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            post = Post.objects.filter(pk=serializer.data.get('liked_post'))
+            if post is not None:
+                if request.user in post[0].liked.all():
+                    like = Like.objects.get(liked_post=post[0], liked_user=request.user)
+                    post[0].liked.remove(request.user)
+                    like.delete()
+                    return Response({'Already liked': 'Like deleted'}, status=status.HTTP_200_OK)
+                
+                like = Like.objects.get_or_create(liked_post=post[0], liked_user=request.user)
+                post[0].liked.add(request.user)
+                post[0].save()
+                return Response({'Like created':{f'liked_post: {post[0]}, user: {request.user}'}}, status=status.HTTP_201_CREATED) 
+            return Response({'Not found': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({'s':'s'})
