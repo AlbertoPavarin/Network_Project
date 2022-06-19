@@ -24,4 +24,5 @@ urlpatterns = [
     path('get-follower-users/', GetFollowerUsersView.as_view()),
     path('search-users', Search.as_view()),
     path('like-post', LikePost.as_view()),
+    path('check-like/', CheckLike.as_view()),
 ]

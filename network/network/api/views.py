@@ -306,7 +306,7 @@ class Search(APIView):
             users = User.objects.filter(username__icontains=serializer.data.get('username'))
             print(users)
             return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
-        return Response({'s': 's'})
+        return Response({'Bad request': 'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
 
 class LikePost(APIView):
     serializer_class = LikeSerializer
@@ -328,4 +328,21 @@ class LikePost(APIView):
                 return Response({'Like created':{f'liked_post: {post[0]}, user: {request.user}'}}, status=status.HTTP_201_CREATED) 
             return Response({'Not found': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        return Response({'s':'s'})
+        return Response({'Bad request':'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
+
+class CheckLike(APIView):
+    serializer_class = LikeSerializer
+    lookup_url_kwarg = "id"
+
+    def get(self, request, format=None):
+        postId = request.GET.get(self.lookup_url_kwarg)
+        if postId is not None:
+            post = Post.objects.filter(pk=postId)
+            if len(post) > 0:
+                if request.user in post[0].liked.all():
+                    return Response({'True': 'User likes this post'}, status=status.HTTP_200_OK)
+
+                return Response({'False': "User doesn't like this post"}, status=status.HTTP_200_OK)
+            return Response({'Not found': 'No post'}, status=status.HTTP_404_NOT_FOUND) 
+        return Response({'Bad request': 'No id passed'}, status=status.HTTP_400_BAD_REQUEST)
+
