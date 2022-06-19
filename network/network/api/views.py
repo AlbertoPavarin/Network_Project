@@ -1,4 +1,5 @@
 import json
+from os import stat
 from django.http import HttpResponseRedirect, JsonResponse
 from rest_framework import generics
 from django.contrib.auth import authenticate, login
@@ -346,3 +347,15 @@ class CheckLike(APIView):
             return Response({'Not found': 'No post'}, status=status.HTTP_404_NOT_FOUND) 
         return Response({'Bad request': 'No id passed'}, status=status.HTTP_400_BAD_REQUEST)
 
+class GetLikeCount(APIView):
+    serializer_class = LikeSerializer
+    lookup_url_kwarg = "id"
+
+    def get(self, request, format=None):
+        postId = request.GET.get(self.lookup_url_kwarg)
+        if postId is not None:
+            post = Post.objects.filter(pk=postId)
+            if len(post) > 0:
+                return Response({'Likes count': post[0].liked.count()}, status=status.HTTP_200_OK)
+            return Response({'Not found': 'No post'}, status=status.HTTP_404_NOT_FOUND) 
+        return Response({'Bad request': 'No id passed'}, status=status.HTTP_400_BAD_REQUEST)

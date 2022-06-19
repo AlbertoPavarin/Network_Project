@@ -25,4 +25,5 @@ urlpatterns = [
     path('search-users', Search.as_view()),
     path('like-post', LikePost.as_view()),
     path('check-like/', CheckLike.as_view()),
+    path('get-likes-count/', GetLikeCount.as_view()),
 ]
