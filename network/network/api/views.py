@@ -303,11 +303,11 @@ class Search(APIView):
 
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            users = User.objects.filter(username__icontains=serializer.data.get('username'))
-            print(users)
-            return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
-        return Response({'Bad request': 'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid()
+        print(serializer.errors)
+        username = serializer.data.get('username')  
+        users = User.objects.filter(username__icontains=username)
+        return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
 
 class LikePost(APIView):
     serializer_class = LikeSerializer
