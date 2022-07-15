@@ -44,7 +44,7 @@ export default class HomePage extends Component {
     return cookieValue;
   }
 
-  likeClick(id) {
+  likeClick(id, state) {
     const requestOptions = {
       method: "POST",
       headers: {
@@ -58,9 +58,17 @@ export default class HomePage extends Component {
     fetch("api/like-post", requestOptions)
       .then((response) => response.json())
       .then((data) => {
+        console.log(state['False'])
         console.log(data);
-        // migliorare magari togliendo il reload
-        window.location.reload();
+        fetch(`/api/check-like/?id=${id}`)
+        .then((response) => response.json())
+        .then((checkLike) => {
+          console.log(checkLike);
+          if (checkLike['False'] == undefined)
+            console.log(document.getElementById(`like-${id}`).innerHTML++);
+          else
+          console.log(document.getElementById(`like-${id}`).innerHTML--);
+        })
       });
   }
 
@@ -90,7 +98,7 @@ export default class HomePage extends Component {
                       post["owner"] = data.username;
                       const postDiv = document.createElement("div");
                       postDiv.className = "post p-4";
-                      postDiv.innerHTML = `  <div class = "row">
+                      postDiv.innerHTML = `<div class = "row">
                                       <div class = "col-12 col-md-3 col-xl-3" id="header-${post["id"]}">
                                         <b class="owner text-primary"><a href="/User/${post["owner"]}">${post["owner"]}</a></b><br>
                                         <span class="timestamp text-secondary">${post["timestamp"]}</span><br>
@@ -100,13 +108,16 @@ export default class HomePage extends Component {
                                       </div>
                                       <div class="col-12 col-md-3 col-xl-3 comment-icon">
                                         <a href="/Comments/${post["id"]}"><span class="material-icons blue-color"> comment</span></a>
-                                        <a href="" id="${post["id"]}"><span class="material-icons">mood</span></a><p>Likes: ${likeCount["Likes count"]}</p>
+                                        <a href="" id="${post["id"]}"><span class="material-icons">mood</span></a>                                   
+                                      </div>
+                                      <div class="col-12 col-md-3 col-xl-3">
+                                        <span>Likes:</span><span id="like-${post['id']}">  ${likeCount["Likes count"]}</span>
                                       </div>
                                     </div>`;
                       document.querySelector(".post-container").appendChild(postDiv);
                       document.getElementById(`${post["id"]}`).addEventListener("click", (e) => {
                           e.preventDefault();
-                          this.likeClick(post["id"]);
+                          this.likeClick(post["id"], checkLike);
                         });
                       document.getElementById(`header-${post["id"]}`).addEventListener(
                           "click",
