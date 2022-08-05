@@ -8,6 +8,12 @@ from django.views.decorators.csrf import csrf_exempt
 def index(request, *args, **kargs):
     return render(request, 'frontend/index.html')
 
+def chat(request, room_name):
+    print(room_name)
+    return render(request, 'frontend/index.html', {
+        'room_name': room_name
+    })
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')

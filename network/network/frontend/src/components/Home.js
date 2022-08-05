@@ -18,6 +18,7 @@ import Bio from "./Bio";
 import Following from "./Following";
 import Follower from "./Follower";
 import FollowingPosts from "./FollowingPosts";
+import Chat from "./Chat";
 
 export default class Home extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ export default class Home extends Component {
           <Route path="/User/Following/:username" element={<Following />} />
           <Route path="/User/Follower/:username" element={<Follower />} />
           <Route path="/Following/Posts" element={<FollowingPosts />} />
+          <Route path="Chat/:room_name" element={<Chat />}/>
         </Routes>
       </Router>
     );

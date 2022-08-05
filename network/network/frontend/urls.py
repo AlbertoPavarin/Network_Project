@@ -1,5 +1,3 @@
-from unicodedata import name
-from django.contrib import admin
 from django.urls import path, include
 from .views import *
 
@@ -16,4 +14,5 @@ urlpatterns = [
     path('User/Following/<str:username>', index),
     path('User/Follower/<str:username>', index),
     path('Following/Posts', index),
+    path('Chat/<str:room_name>', chat)
 ]
