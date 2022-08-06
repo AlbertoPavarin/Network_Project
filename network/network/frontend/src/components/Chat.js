@@ -7,7 +7,7 @@ export default class Chat extends Component {
       super(props);
         this.state = {
             messageText: "",
-            socket: new WebSocket(`ws://${window.location.host}/ws/chat/${window.location.pathname.split('Chat/')[1]}`)
+            socket: new WebSocket(`ws://${window.location.host}/ws/chat/${window.location.pathname.split('Chat/')[1]}/`)
         }
         this.sendBtnPressed = this.sendBtnPressed.bind(this);
         this.messageTextChange = this.messageTextChange.bind(this);
@@ -31,10 +31,15 @@ export default class Chat extends Component {
     sendBtnPressed(e) {
         e.preventDefault();
         console.log(this.state.messageText)
-        this.state.socket.send(JSON.stringify({
-            'message': this.state.messageText,
-        }))
-        document.querySelector('#chat-input').value = '';
+        if (this.state.messageText.length !== 0) {
+            this.state.socket.send(JSON.stringify({
+                'message': this.state.messageText,
+            }))
+            this.setState({
+                messageText: ''
+            })
+            document.querySelector('#chat-input').value = '';
+        }
     }
 
     render(){

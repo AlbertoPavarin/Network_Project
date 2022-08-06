@@ -15,3 +15,5 @@ class ChatConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({ #json.dumps => obj to json str
             'message': message
         }))
+
+        print(message)

@@ -23,6 +23,8 @@ import Chat from "./Chat";
 export default class Home extends Component {
   constructor(props) {
     super(props);
+
+    // <Route path="Chat/:room_name" element={<Chat />} />
   }
 
   render() {
@@ -40,7 +42,7 @@ export default class Home extends Component {
           <Route path="/User/Following/:username" element={<Following />} />
           <Route path="/User/Follower/:username" element={<Follower />} />
           <Route path="/Following/Posts" element={<FollowingPosts />} />
-          <Route path="Chat/:room_name" element={<Chat />}/>
+          <Route path="Chat/:room_name" element={<Chat />} />
         </Routes>
       </Router>
     );
