@@ -29,6 +29,7 @@ export default class Profile extends Component{
             info: "",
             followerNumber: 0,
             followingNumber: 0,
+            myUsername: "",
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
@@ -38,6 +39,7 @@ export default class Profile extends Component{
         this.editBioPressed = this.editBioPressed.bind(this);
         this.followPressed = this.followPressed.bind(this);
         this.unfollowPressed = this.unfollowPressed.bind(this);
+        this.chatPressed = this.chatPressed.bind(this);
         this.months = {
             0: "January",
             1: "February",
@@ -92,6 +94,9 @@ export default class Profile extends Component{
             throw new Error(response.data);
         })
         .then((data) => {
+            this.setState({
+                myUsername: data['Success']
+            })
             if (this.state.username == data['Success'])
             {
                 const btnEdit = document.createElement('button');
@@ -245,11 +250,16 @@ export default class Profile extends Component{
         window.location.href = '/User/Follower/' + this.usernameToFind;
     }
 
+    chatPressed(){
+        window.location.href = `/Chat/${this.state.username}_${this.state.myUsername}`
+    }
+
     render(){
         return (
             <div id='user-container'>
                 <div id='username' className='mb-4'>
                     <h1>{this.state.username}</h1>
+                    <a onClick={this.chatPressed}>Chat</a>
                 </div>
                 <div id="un-follow-btn"></div>
                 <hr />
