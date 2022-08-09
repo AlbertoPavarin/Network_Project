@@ -7,7 +7,8 @@ export default class Chat extends Component {
       super(props);
         this.state = {
             messageText: "",
-            socket: new WebSocket(`ws://${window.location.host}/ws/chat/${window.location.pathname.split('Chat/')[1]}/`)
+            roomName: window.location.pathname.split('Chat/')[1],
+            socket: new WebSocket(`ws://${window.location.host}/ws/chat/${this.roomName}/`)
         }
         this.sendBtnPressed = this.sendBtnPressed.bind(this);
         this.messageTextChange = this.messageTextChange.bind(this);
@@ -43,14 +44,21 @@ export default class Chat extends Component {
     }
 
     render(){
-        return (
-            <div>
-                <input type="text" id="chat-input" className="form-control mt-4" onChange={this.messageTextChange}/>
-                <input type="button" id="chat-input-btn" className="btn btn-primary mt-3" value="Send" onClick={this.sendBtnPressed}/>
-                <div id="chat-log">
+        let names = this.state.roomName.split('-');
+        if (typeof names[1] == 'undefined' || names[1].length <= 0){
+            return(
+                <p>No chat</p>
+            )
+        }
+        else{
+            return (
+                <div>
+                    <input type="text" id="chat-input" className="form-control mt-4" onChange={this.messageTextChange}/>
+                    <input type="button" id="chat-input-btn" className="btn btn-primary mt-3" value="Send" onClick={this.sendBtnPressed}/>
+                    <div id="chat-log">
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
 }
-

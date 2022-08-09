@@ -1,5 +1,4 @@
 import json
-from os import stat
 from django.http import HttpResponseRedirect, JsonResponse
 from rest_framework import generics
 from django.contrib.auth import authenticate, login
@@ -359,3 +358,16 @@ class GetLikeCount(APIView):
                 return Response({'Likes count': post[0].liked.count()}, status=status.HTTP_200_OK)
             return Response({'Not found': 'No post'}, status=status.HTTP_404_NOT_FOUND) 
         return Response({'Bad request': 'No id passed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class UserExist(APIView):
+    serializer_class = UserSerializer
+    lookup_url_kwarg = 'username'
+
+    def get(self, request, format=None):
+        username = request.GET.get(self.lookup_url_kwarg)
+        if username is not None:
+            user = User.objects.filter(username=username)
+            if len(user) > 0:
+                return Response({'Found': 'User exist'}, status=status.HTTP_200_OK)
+            return Response({"Not found': 'User didn't find"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)

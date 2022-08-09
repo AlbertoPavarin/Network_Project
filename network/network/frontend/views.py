@@ -9,7 +9,6 @@ def index(request, *args, **kargs):
     return render(request, 'frontend/index.html')
 
 def chat(request, room_name):
-    print(room_name)
     return render(request, 'frontend/index.html', {
         'room_name': room_name
     })

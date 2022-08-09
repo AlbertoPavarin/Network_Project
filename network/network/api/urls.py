@@ -26,4 +26,5 @@ urlpatterns = [
     path('like-post', LikePost.as_view()),
     path('check-like/', CheckLike.as_view()),
     path('get-likes-count/', GetLikeCount.as_view()),
+    path('user-exist/', UserExist.as_view()),
 ]
