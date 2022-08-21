@@ -1,7 +1,7 @@
 from pyexpat import model
 
 from attr import fields
-from .models import Comment, Follower, Like, Post, User
+from .models import Comment, Follower, Like, Message, Post, User
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
@@ -58,3 +58,8 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ('liked_post',)
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Message
+        fields = ('recipient', 'content')

@@ -303,7 +303,7 @@ class Search(APIView):
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid()
-        print(serializer.errors)
+        # print(serializer.errors)
         username = serializer.data.get('username')  
         users = User.objects.filter(username__icontains=username)
         return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
@@ -368,6 +368,20 @@ class UserExist(APIView):
         if username is not None:
             user = User.objects.filter(username=username)
             if len(user) > 0:
-                return Response({'Found': 'User exist'}, status=status.HTTP_200_OK)
-            return Response({"Not found': 'User didn't find"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({'Found': 'Found'}, status=status.HTTP_200_OK)
+            return Response({'Not found': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'Bad request': 'No username passed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class SendMessage(APIView):
+    serializer_class = MessageSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            recipient_id = serializer.data.get('recipient')
+            recipient = User.objects.filter(pk=recipient_id)
+            content = serializer.data.get('content')
+            message = Message(sender=request.user, recipient=recipient[0], content=content)
+            message.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

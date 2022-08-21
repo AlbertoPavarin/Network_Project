@@ -42,3 +42,11 @@ class Like(models.Model):
 
     def __str__(self):
         return f'{self.liked_user} liked {self.liked_post}'
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_sender")
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_recipient")
+    content = models.CharField(max_length=512)
+
+    def __str__(self):
+        return f'{self.content}, {self.sender} to {self.recipient}'

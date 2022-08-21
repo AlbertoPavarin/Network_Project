@@ -8,11 +8,12 @@ export default class Chat extends Component {
         this.state = {
             messageText: "",
             roomName: window.location.pathname.split('Chat/')[1],
-            socket: new WebSocket(`ws://${window.location.host}/ws/chat/${this.roomName}/`)
+            socket: new WebSocket(`ws://${window.location.host}/ws/chat/${this.roomName}/`),
+            usersExist: true
         }
+        this.names = this.state.roomName.split('-');
         this.sendBtnPressed = this.sendBtnPressed.bind(this);
         this.messageTextChange = this.messageTextChange.bind(this);
-
         this.state.socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             document.getElementById('chat-log').innerHTML += `${data.message}<br>`
@@ -21,6 +22,25 @@ export default class Chat extends Component {
         this.state.socket.onclose = (e) => {
             console.error('Socket closed');
         }
+        this.checkUser()
+    }
+
+    checkUser(){
+        this.names.forEach((username) => {
+            fetch(`/api/user-exist/?username=${username}`)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.data);
+                })
+            .catch(error => {
+                this.setState({
+                    usersExist: false
+                })
+                return -1;
+            })
+        })
     }
 
     messageTextChange(e) {
@@ -44,8 +64,7 @@ export default class Chat extends Component {
     }
 
     render(){
-        let names = this.state.roomName.split('-');
-        if (typeof names[1] == 'undefined' || names[1].length <= 0){
+        if (typeof this.names[1] == 'undefined' || this.names[1].length <= 0 || this.state.usersExist == false){
             return(
                 <p>No chat</p>
             )

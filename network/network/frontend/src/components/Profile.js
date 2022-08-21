@@ -97,6 +97,7 @@ export default class Profile extends Component{
             this.setState({
                 myUsername: data['Success']
             })
+            this.chatRender(data['Success']);
             if (this.state.username == data['Success'])
             {
                 const btnEdit = document.createElement('button');
@@ -172,7 +173,6 @@ export default class Profile extends Component{
 
     followPressed(e){
         e.preventDefault();
-        console.log(this.state.user_id);
         const requestOptions = {
             method: "POST",
             headers: { 
@@ -250,8 +250,16 @@ export default class Profile extends Component{
         window.location.href = '/User/Follower/' + this.usernameToFind;
     }
 
+    chatRender(username){
+        if (username !== this.state.username){
+            document.querySelector('#chat').innerHTML = 'Chat'
+        }
+    }
+
     chatPressed(){
-        window.location.href = `/Chat/${this.state.username}_${this.state.myUsername}`
+        let names = [this.state.username, this.state.myUsername]
+        names.sort()
+        window.location.href = `/Chat/${names[0]}-${names[1]}`
     }
 
     render(){
@@ -259,7 +267,7 @@ export default class Profile extends Component{
             <div id='user-container'>
                 <div id='username' className='mb-4'>
                     <h1>{this.state.username}</h1>
-                    <a onClick={this.chatPressed}>Chat</a>
+                    <a id="chat" onClick={this.chatPressed}></a>
                 </div>
                 <div id="un-follow-btn"></div>
                 <hr />
