@@ -51,7 +51,7 @@ export default class Login extends Component {
 
   buttonPressed(e) {
     e.preventDefault();
-    console.log(`${this.state.username}, ${this.state.password}`)
+    //console.log(`${this.state.username}, ${this.state.password}`)
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
