@@ -14,5 +14,6 @@ urlpatterns = [
     path('User/Following/<str:username>', index),
     path('User/Follower/<str:username>', index),
     path('Following/Posts', index),
-    path('Chat/<str:room_name>', chat)
+    path('Chat/<str:room_name>', chat),
+    path('Search/<str:search_string>', index),
 ]

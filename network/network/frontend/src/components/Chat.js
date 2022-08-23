@@ -28,13 +28,15 @@ export default class Chat extends Component {
             socket: new WebSocket(`ws://${window.location.host}/ws/chat/${this.roomName}/`),
             usersExist: true,
             logged: '',
-            recipient: '',
         }
         this.names = this.state.roomName.split('-');
         this.sendBtnPressed = this.sendBtnPressed.bind(this);
         this.messageTextChange = this.messageTextChange.bind(this);
-        this.checkUser = this.checkUser.bind(this)
-        this.recipient = ''
+        this.IsLoggedIn = this.IsLoggedIn.bind(this);
+        this.checkUser = this.checkUser.bind(this);
+        this.getMessages = this.getMessages.bind(this);
+        this.recipient = '',
+        this.myUsername = '';
         this.state.socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             document.getElementById('chat-log').innerHTML += `${data.message}<br>`
@@ -44,7 +46,6 @@ export default class Chat extends Component {
             console.error('Socket closed');
         }
         this.IsLoggedIn();
-        this.checkUser();
     }
 
     IsLoggedIn() {
@@ -63,7 +64,13 @@ export default class Chat extends Component {
                 if (data['Success'] !== username){
                     this.recipient = username
                 }
+                else{
+                  this.myUsername = username
+                }
             })
+            this.checkUser();
+            this.getMessages(this.myUsername, this.recipient);
+            this.getMessages(this.recipient, this.myUsername)
             fetch(`/api/get-user/?username=${this.recipient}`)
             .then((response) => response.json())
             .then((data) => this.recipient = data['id'])
@@ -101,7 +108,7 @@ export default class Chat extends Component {
 
     sendBtnPressed(e) {
         e.preventDefault();
-        console.log(this.names)
+        //console.log(this.names)
         if (this.state.messageText.length !== 0) {
             this.state.socket.send(JSON.stringify({
                 'message': this.state.messageText,
@@ -121,10 +128,16 @@ export default class Chat extends Component {
             .then((response) => response.json())
             .then((data) => console.log(data))
             this.setState({
-                messageText: ''
+                messageText: '',
             })
             document.querySelector('#chat-input').value = '';
         }
+    }
+
+    getMessages(sender, recipient){
+      fetch(`/api/get-messages/${sender}/${recipient}`)
+      .then((response) => response.json())
+      .then((data) => console.log(data['Messages']));
     }
 
     render(){

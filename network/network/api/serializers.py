@@ -63,3 +63,8 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Message
         fields = ('recipient', 'content')
+
+class GetMessageSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('sender', 'recipient', 'content')

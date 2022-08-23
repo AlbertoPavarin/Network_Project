@@ -58,17 +58,16 @@ export default class HomePage extends Component {
     fetch("api/like-post", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(state['False'])
+        console.log(state["False"]);
         console.log(data);
         fetch(`/api/check-like/?id=${id}`)
-        .then((response) => response.json())
-        .then((checkLike) => {
-          console.log(checkLike);
-          if (checkLike['False'] == undefined)
-            console.log(document.getElementById(`like-${id}`).innerHTML++);
-          else
-          console.log(document.getElementById(`like-${id}`).innerHTML--);
-        })
+          .then((response) => response.json())
+          .then((checkLike) => {
+            console.log(checkLike);
+            if (checkLike["False"] == undefined)
+              console.log(document.getElementById(`like-${id}`).innerHTML++);
+            else console.log(document.getElementById(`like-${id}`).innerHTML--);
+          });
       });
   }
 
@@ -111,15 +110,21 @@ export default class HomePage extends Component {
                                         <a href="" id="${post["id"]}"><span class="material-icons">mood</span></a>                                   
                                       </div>
                                       <div class="col-12 col-md-3 col-xl-3">
-                                        <span>Likes:</span><span id="like-${post['id']}">  ${likeCount["Likes count"]}</span>
+                                        <span>Likes:</span><span id="like-${post["id"]}">  ${likeCount["Likes count"]}</span>
                                       </div>
                                     </div>`;
-                      document.querySelector(".post-container").appendChild(postDiv);
-                      document.getElementById(`${post["id"]}`).addEventListener("click", (e) => {
+                      document
+                        .querySelector(".post-container")
+                        .appendChild(postDiv);
+                      document
+                        .getElementById(`${post["id"]}`)
+                        .addEventListener("click", (e) => {
                           e.preventDefault();
                           this.likeClick(post["id"], checkLike);
                         });
-                      document.getElementById(`header-${post["id"]}`).addEventListener(
+                      document
+                        .getElementById(`header-${post["id"]}`)
+                        .addEventListener(
                           "click",
                           () => (window.location.href = `Post/${post["id"]}`)
                         );
@@ -137,7 +142,8 @@ export default class HomePage extends Component {
   }
 
   searchBtnPressed(e) {
-    const requestOptions = {
+    e.preventDefault();
+    /*const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -149,29 +155,32 @@ export default class HomePage extends Component {
     };
     fetch("/api/search-users", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => console.log(data));*/
+    window.location.href = `/Search/${this.state.searchTxt}`;
   }
 
   render() {
     return (
       <div>
-        <label htmlFor="searchbar">Search</label>
-        <input
-          name="searchbar"
-          type="text"
-          className="form-control"
-          onChange={this.searchChange}
-        />
-        <input
-          type="button"
-          className="btn btn-primary mt-2"
-          value="Search"
-          onClick={this.searchBtnPressed}
-        />
-        <hr />
-        <h1>Posts</h1>
-        <hr />
-        <div className="post-container"></div>
+        <form>
+          <label htmlFor="searchbar">Search</label>
+          <input
+            name="searchbar"
+            type="text"
+            className="form-control"
+            onChange={this.searchChange}
+          />
+          <input
+            type="submit"
+            className="btn btn-primary mt-2"
+            value="Search"
+            onClick={this.searchBtnPressed}
+          />
+          <hr />
+          <h1>Posts</h1>
+          <hr />
+          <div className="post-container"></div>
+        </form>
       </div>
     );
   }

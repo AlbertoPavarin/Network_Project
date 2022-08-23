@@ -27,5 +27,6 @@ urlpatterns = [
     path('check-like/', CheckLike.as_view()),
     path('get-likes-count/', GetLikeCount.as_view()),
     path('user-exist/', UserExist.as_view()),
-    path('send-message', SendMessage.as_view())
+    path('send-message', SendMessage.as_view()),
+    path('get-messages/<str:sender>/<str:recipient>', GetMessages.as_view()),
 ]

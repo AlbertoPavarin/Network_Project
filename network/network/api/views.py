@@ -1,3 +1,4 @@
+from cgitb import lookup
 import json
 from django.http import HttpResponseRedirect, JsonResponse
 from rest_framework import generics
@@ -306,7 +307,9 @@ class Search(APIView):
         # print(serializer.errors)
         username = serializer.data.get('username')  
         users = User.objects.filter(username__icontains=username)
-        return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
+        if len(users) > 0:
+            return Response({'users': SearchUserSerializer(users, many="True").data}, status=status.HTTP_200_OK)
+        return Response({'Not found': 'No users found'}, status=status.HTTP_404_NOT_FOUND)
 
 class LikePost(APIView):
     serializer_class = LikeSerializer
@@ -385,3 +388,13 @@ class SendMessage(APIView):
             message.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetMessages(APIView):
+    serializer_class = MessageSerializer
+    lookup_url_kwargs = ['sender', 'recipient']
+
+    def get(self, request, sender, recipient):
+        senderUser = User.objects.filter(username=sender)[0]
+        recipientUser = User.objects.filter(username=recipient)[0]
+        messages = Message.objects.filter(sender=senderUser, recipient=recipientUser)
+        return Response({'Messages': MessageSerializer(messages, many='True').data}, status=status.HTTP_200_OK)
