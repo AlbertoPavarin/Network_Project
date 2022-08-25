@@ -163,3 +163,45 @@ html, .body, #main, .wrapper{
      display: block;
   }
 }
+
+.chat-left {
+  margin-top: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chat-left p {
+  color: #fff;
+  padding-right: 10px;
+  padding-left: 5px;
+  background-color: #888;
+  border-radius: 12px;
+  border-color: #888;
+  border-style: solid;
+} 
+
+.chat-right {
+  margin-top: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chat-right p {
+  color: #fff;
+  padding-right: 10px;
+  padding-left: 5px;
+  background-color: #06f;
+  border-radius: 12px;
+  border-color: #06f;
+  border-style: solid;
+  max-width: 50%;
+}
+
+#sticky-chat {
+  position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+}

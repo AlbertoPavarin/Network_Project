@@ -39,7 +39,15 @@ export default class Chat extends Component {
         this.myUsername = '';
         this.state.socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            document.getElementById('chat-log').innerHTML += `${data.message}<br>`
+            const message = document.createElement('p');
+            if (data.sender === this.myUsername) {
+              message.className = 'chat-right';
+            }
+            else {
+              message.className = 'chat-left';
+            }
+            message.innerHTML = `${data.message}`
+            document.getElementById('chat-log').appendChild(message);
         }
 
         this.state.socket.onclose = (e) => {
@@ -112,6 +120,7 @@ export default class Chat extends Component {
         if (this.state.messageText.length !== 0) {
             this.state.socket.send(JSON.stringify({
                 'message': this.state.messageText,
+                'sender': this.myUsername,
             }))
             const requestOptions = {
                 method: "POST",
@@ -137,7 +146,26 @@ export default class Chat extends Component {
     getMessages(sender, recipient){
       fetch(`/api/get-messages/${sender}/${recipient}`)
       .then((response) => response.json())
-      .then((data) => console.log(data['Messages']));
+      .then((data) => {
+        data['Messages'].forEach((message) => {
+          //console.log(message['sender'])
+          fetch(`/api/get-user-id/?id=${message['sender']}`)
+          .then((response) => response.json())
+          .then((data) => {
+            //console.log(data)
+            const sender = data['username'];
+            const messageDiv = document.createElement('div');
+            if (sender === this.myUsername) {
+              messageDiv.className = 'chat-right';
+            }
+            else {
+              messageDiv.className = 'chat-left';
+            }
+            messageDiv.innerHTML = `<p>${message['content']}</p>`
+            document.getElementById('chat-log').appendChild(messageDiv);
+        })
+          })
+      });
     }
 
     render(){
@@ -148,12 +176,20 @@ export default class Chat extends Component {
         }
         else{
             return (
-                <div>
-                    <form autoComplete="off">
-                        <input type="text" id="chat-input" className="form-control mt-4" onChange={this.messageTextChange}/>
-                        <input type="Submit" id="chat-input-btn" className="btn btn-primary mt-3" value="Send" onClick={this.sendBtnPressed}/>
-                    </form>
+                <div id="chat-wrapper mt-5">
                     <div id="chat-log">
+                    </div>
+                    <div id="sticky-chat">
+                      <form autoComplete="off" className="form-control pb-3">
+                        <div className="form-row">
+                          <div className="col-10 col-md-11">
+                            <input type="text" id="chat-input" className="form-control mt-2" onChange={this.messageTextChange}/>
+                          </div>
+                          <div className="col-2 col-md-1">
+                            <input type="Submit" id="chat-input-btn" className="btn btn-primary mt-2" value="Send" onClick={this.sendBtnPressed}/>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                 </div>
             )

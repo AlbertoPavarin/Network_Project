@@ -390,11 +390,11 @@ class SendMessage(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GetMessages(APIView):
-    serializer_class = MessageSerializer
+    serializer_class = GetMessageSerilizer
     lookup_url_kwargs = ['sender', 'recipient']
 
     def get(self, request, sender, recipient):
         senderUser = User.objects.filter(username=sender)[0]
         recipientUser = User.objects.filter(username=recipient)[0]
         messages = Message.objects.filter(sender=senderUser, recipient=recipientUser)
-        return Response({'Messages': MessageSerializer(messages, many='True').data}, status=status.HTTP_200_OK)
+        return Response({'Messages': GetMessageSerilizer(messages, many='True').data}, status=status.HTTP_200_OK)
