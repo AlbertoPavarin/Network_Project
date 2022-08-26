@@ -37,6 +37,8 @@ export default class Chat extends Component {
         this.getMessages = this.getMessages.bind(this);
         this.recipient = '',
         this.myUsername = '';
+        this.messages = [];
+        this.a =[1,2, 3] 
         this.state.socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             const message = document.createElement('p');
@@ -78,7 +80,8 @@ export default class Chat extends Component {
             })
             this.checkUser();
             this.getMessages(this.myUsername, this.recipient);
-            this.getMessages(this.recipient, this.myUsername)
+            this.rendermessage()
+            console.log(this.messages)
             fetch(`/api/get-user/?username=${this.recipient}`)
             .then((response) => response.json())
             .then((data) => this.recipient = data['id'])
@@ -148,14 +151,10 @@ export default class Chat extends Component {
       .then((response) => response.json())
       .then((data) => {
         data['Messages'].forEach((message) => {
-          //console.log(message['sender'])
-          fetch(`/api/get-user-id/?id=${message['sender']}`)
-          .then((response) => response.json())
-          .then((data) => {
-            //console.log(data)
-            const sender = data['username'];
+            //console.log(this.messages);
+            
             const messageDiv = document.createElement('div');
-            if (sender === this.myUsername) {
+            if (message['sender'] === this.myUsername) {
               messageDiv.className = 'chat-right';
             }
             else {
@@ -165,7 +164,10 @@ export default class Chat extends Component {
             document.getElementById('chat-log').appendChild(messageDiv);
         })
           })
-      });
+    }
+    
+    rendermessage(){
+      console.log('a')
     }
 
     render(){

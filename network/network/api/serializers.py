@@ -67,4 +67,4 @@ class MessageSerializer(serializers.ModelSerializer):
 class GetMessageSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('sender', 'recipient', 'content')
+        fields = ('sender', 'recipient', 'content', 'timestamp')

@@ -1,4 +1,3 @@
-from cgitb import lookup
 import json
 from django.http import HttpResponseRedirect, JsonResponse
 from rest_framework import generics
@@ -394,7 +393,14 @@ class GetMessages(APIView):
     lookup_url_kwargs = ['sender', 'recipient']
 
     def get(self, request, sender, recipient):
+        messages = []
         senderUser = User.objects.filter(username=sender)[0]
         recipientUser = User.objects.filter(username=recipient)[0]
-        messages = Message.objects.filter(sender=senderUser, recipient=recipientUser)
-        return Response({'Messages': GetMessageSerilizer(messages, many='True').data}, status=status.HTTP_200_OK)
+        messagesSTR = Message.objects.filter(sender=senderUser, recipient=recipientUser)
+        messagesRTS = Message.objects.filter(sender = recipientUser, recipient=senderUser)
+        messagesSent = [messagesSTR, messagesRTS]
+        for m in messagesSent:
+            for message in m:
+                messages.append({'sender': message.sender.username, 'recipient': message.recipient.username, 'content': message.content, 'timestamp':message.timestamp})
+        print(messages)
+        return Response({'Messages': messages}, status=status.HTTP_200_OK)
