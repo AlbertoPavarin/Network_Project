@@ -164,6 +164,10 @@ html, .body, #main, .wrapper{
   }
 }
 
+#chat-log {
+  margin-bottom: 100px;
+}
+
 .chat-left {
   margin-top: 5px;
   width: 100%;
@@ -200,8 +204,19 @@ html, .body, #main, .wrapper{
 }
 
 #sticky-chat {
+  margin-top: 100px;
   position: fixed;
    left: 0;
    bottom: 0;
    width: 100%;
+}
+
+.sticky-navbar {
+  position: fixed;
+   top: 0;
+   width: 100%;
+}
+
+.sticky-navbar + .wrapper {
+  padding-top: 56px;
 }

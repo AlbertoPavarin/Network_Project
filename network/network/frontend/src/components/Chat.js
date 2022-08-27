@@ -35,21 +35,22 @@ export default class Chat extends Component {
         this.IsLoggedIn = this.IsLoggedIn.bind(this);
         this.checkUser = this.checkUser.bind(this);
         this.getMessages = this.getMessages.bind(this);
-        this.recipient = '',
+        this.renderMessages = this.renderMessages.bind(this)
+        this.recipient = ''
         this.myUsername = '';
         this.messages = [];
-        this.a =[1,2, 3] 
         this.state.socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            const message = document.createElement('p');
-            if (data.sender === this.myUsername) {
-              message.className = 'chat-right';
+            const messageDiv = document.createElement('div');
+            if (data.sender == this.myUsername) {
+              messageDiv.className = 'chat-right';
             }
             else {
-              message.className = 'chat-left';
+              messageDiv.className = 'chat-left';
             }
-            message.innerHTML = `${data.message}`
-            document.getElementById('chat-log').appendChild(message);
+            messageDiv.innerHTML = `<p>${data.message}</p>`
+            document.getElementById('chat-log').appendChild(messageDiv);
+            window.scrollTo(0, document.body.scrollHeight)
         }
 
         this.state.socket.onclose = (e) => {
@@ -80,8 +81,6 @@ export default class Chat extends Component {
             })
             this.checkUser();
             this.getMessages(this.myUsername, this.recipient);
-            this.rendermessage()
-            console.log(this.messages)
             fetch(`/api/get-user/?username=${this.recipient}`)
             .then((response) => response.json())
             .then((data) => this.recipient = data['id'])
@@ -143,6 +142,7 @@ export default class Chat extends Component {
                 messageText: '',
             })
             document.querySelector('#chat-input').value = '';
+            window.scrollTo(0, document.body.scrollHeight)
         }
     }
 
@@ -151,23 +151,27 @@ export default class Chat extends Component {
       .then((response) => response.json())
       .then((data) => {
         data['Messages'].forEach((message) => {
-            //console.log(this.messages);
-            
-            const messageDiv = document.createElement('div');
-            if (message['sender'] === this.myUsername) {
-              messageDiv.className = 'chat-right';
-            }
-            else {
-              messageDiv.className = 'chat-left';
-            }
-            messageDiv.innerHTML = `<p>${message['content']}</p>`
-            document.getElementById('chat-log').appendChild(messageDiv);
-        })
+          //console.log(this.messages);
+          this.messages.push(message)
+      })
+        this.renderMessages(this.messages.sort((a, b) => a.timestamp.localeCompare(b.timestamp)))
           })
     }
-    
-    rendermessage(){
-      console.log('a')
+
+    renderMessages(messages){
+      messages.forEach((message) => {
+        //console.log(this.messages);
+        const messageDiv = document.createElement('div');
+        if (message['sender'] === this.myUsername) {
+          messageDiv.className = 'chat-right';
+        }
+        else {
+          messageDiv.className = 'chat-left';
+        }
+        messageDiv.innerHTML = `<p>${message['content']}</p>`
+        document.getElementById('chat-log').appendChild(messageDiv);
+        window.scrollTo(0, document.body.scrollHeight)
+    })
     }
 
     render(){
