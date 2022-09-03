@@ -42,7 +42,6 @@ export default class Profile extends Component{
         this.followPressed = this.followPressed.bind(this);
         this.unfollowPressed = this.unfollowPressed.bind(this);
         this.chatPressed = this.chatPressed.bind(this);
-        this.picChange = this.picChange.bind(this);
         this.changePicPressed = this.changePicPressed.bind(this);
         this.months = {
             0: "January",
@@ -109,6 +108,9 @@ export default class Profile extends Component{
                 btnEdit.innerHTML = "Edit Bio";
                 btnEdit.onclick = this.editBioPressed; 
                 document.querySelector('#edit-bio-btn').appendChild(btnEdit);
+                document.querySelector('#change-prof-pic').innerHTML = `<input name="img" id="img-change-btn" type="file"/>
+                                                                        <input type="submit" class='btn btn-primary' />`
+                document.querySelector('#img-change-btn').addEventListener('change', (e) => this.picChange(e))
             }
             else
             {
@@ -268,9 +270,9 @@ export default class Profile extends Component{
 
     picChange(e){
         this.setState({
-            profile_pic: e.target.files[0]
+            profile_pic: e.target.files[0],
         })
-        //console.log(this.state.profile_pic)
+        console.log(this.state.profile_pic)
     }
 
     changePicPressed(e){
@@ -287,7 +289,9 @@ export default class Profile extends Component{
           };
         fetch('/api/change-pic', requestOptions)
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => {
+            window.location.reload();
+        })
     }
 
     render(){
@@ -295,9 +299,7 @@ export default class Profile extends Component{
             <div id='user-container'>
                 <div id='username' className='mb-4'>
                     <h1>{this.state.username}</h1>
-                    <form id='change-prof-pic' onSubmit={this.changePicPressed}>
-                        <input name="img" type="file" className="form-control w-100" onChange={this.picChange}/>
-                        <input type="submit" />
+                    <form id='change-prof-pic' className='form-control w-100' onSubmit={this.changePicPressed}>
                     </form>
                     <a id="chat" onClick={this.chatPressed}></a>
                 </div>
