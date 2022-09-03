@@ -29,4 +29,5 @@ urlpatterns = [
     path('user-exist/', UserExist.as_view()),
     path('send-message', SendMessage.as_view()),
     path('get-messages/<str:sender>/<str:recipient>', GetMessages.as_view()),
+    path('change-pic', ChangeProfilePic.as_view()),
 ]

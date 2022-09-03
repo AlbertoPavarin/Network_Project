@@ -68,3 +68,8 @@ class GetMessageSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('sender', 'recipient', 'content', 'timestamp')
+
+class ChangePicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('profile_pic', )

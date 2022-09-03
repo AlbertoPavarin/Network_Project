@@ -26,6 +26,7 @@ export default class Bio extends Component {
       info: "",
       logged: "",
     };
+    this.fileInput = React.createRef();
     this.IsLoggedIn();
     this.firstNameChange = this.firstNameChange.bind(this);
     this.lastNameChange = this.lastNameChange.bind(this);
@@ -85,13 +86,14 @@ export default class Bio extends Component {
           first_name: this.state.firstName,
           last_name: this.state.lastName,
           info: this.state.info,
+          profile_pic: this.fileInput.current.files[0],
         }),
       };
       fetch('/api/edit-bio/', requestOptions)
       .then((response) => response.json())
       .then((data) => {
           console.log(data);
-          window.location.href = "/"
+          //window.location.href = "/"
       })
   }
 
@@ -101,7 +103,7 @@ export default class Bio extends Component {
     }
     return (
         <div className="mr-4 ml-4">
-        <div className="login mt-5">
+        <form className="login mt-5">
             <h1>Bio</h1>
             <h5 id="error-message"></h5>
             <label className="mt-4" htmlFor="first-name">
@@ -117,7 +119,7 @@ export default class Bio extends Component {
             </label>
             <input name="info" type="text" className="form-control w-100" onChange={this.infoChange}/>
             <input type="Button" className="btn btn-primary mt-4" value="Edit Bio" onClick={this.buttonPressed} />
-        </div>
+        </form>
       </div>
     );
   }

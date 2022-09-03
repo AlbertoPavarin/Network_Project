@@ -30,9 +30,11 @@ export default class Profile extends Component{
             followerNumber: 0,
             followingNumber: 0,
             myUsername: "",
+            profile_pic: '',
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
+        this.picChange = this.picChange.bind(this);
         this.followingPressed = this.followingPressed.bind(this);
         this.followerPressed = this.followerPressed.bind(this);
         this.getUserPosts();
@@ -40,6 +42,8 @@ export default class Profile extends Component{
         this.followPressed = this.followPressed.bind(this);
         this.unfollowPressed = this.unfollowPressed.bind(this);
         this.chatPressed = this.chatPressed.bind(this);
+        this.picChange = this.picChange.bind(this);
+        this.changePicPressed = this.changePicPressed.bind(this);
         this.months = {
             0: "January",
             1: "February",
@@ -262,11 +266,39 @@ export default class Profile extends Component{
         window.location.href = `/Chat/${names[0]}-${names[1]}`
     }
 
+    picChange(e){
+        this.setState({
+            profile_pic: e.target.files[0]
+        })
+        //console.log(this.state.profile_pic)
+    }
+
+    changePicPressed(e){
+        e.preventDefault()
+        let fileInput = new FormData();
+        console.log(this.state.profile_pic)
+        fileInput.append('profile_pic', this.state.profile_pic);
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: fileInput
+          };
+        fetch('/api/change-pic', requestOptions)
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+    }
+
     render(){
         return (
             <div id='user-container'>
                 <div id='username' className='mb-4'>
                     <h1>{this.state.username}</h1>
+                    <form id='change-prof-pic' onSubmit={this.changePicPressed}>
+                        <input name="img" type="file" className="form-control w-100" onChange={this.picChange}/>
+                        <input type="submit" />
+                    </form>
                     <a id="chat" onClick={this.chatPressed}></a>
                 </div>
                 <div id="un-follow-btn"></div>

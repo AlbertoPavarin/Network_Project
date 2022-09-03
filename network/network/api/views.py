@@ -195,6 +195,16 @@ class EditBio(APIView):
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
+class ChangeProfilePic(APIView):
+    serializer_class = ChangePicSerializer
+
+    def post(self, request, format=None):
+        profile_pic = request.data['profile_pic']
+        user = User.objects.filter(pk=request.user.id)[0]
+        user.profile_pic = profile_pic
+        user.save()
+        return Response({'m':'m'})
+
 class FollowView(APIView):
     serializer_class = FollowSerializer
 
