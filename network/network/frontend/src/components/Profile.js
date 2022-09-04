@@ -31,6 +31,7 @@ export default class Profile extends Component{
             followingNumber: 0,
             myUsername: "",
             profile_pic: '',
+            profile_pic_change: '',
         };
         this.usernameToFind = window.location.pathname.split('User/')[1];
         this.getUserDetails();
@@ -76,6 +77,7 @@ export default class Profile extends Component{
                 first_name: data.first_name,
                 last_name: data.last_name,
                 info: data.info,
+                profile_pic: data.profile_pic
             });
             this.isLoggedIn();
             this.getFollowernumber();
@@ -270,16 +272,14 @@ export default class Profile extends Component{
 
     picChange(e){
         this.setState({
-            profile_pic: e.target.files[0],
+            profile_pic_change: e.target.files[0],
         })
-        console.log(this.state.profile_pic)
     }
 
     changePicPressed(e){
         e.preventDefault()
         let fileInput = new FormData();
-        console.log(this.state.profile_pic)
-        fileInput.append('profile_pic', this.state.profile_pic);
+        fileInput.append('profile_pic', this.state.profile_pic_change);
         const requestOptions = {
             method: "POST",
             headers: { 
@@ -299,7 +299,9 @@ export default class Profile extends Component{
             <div id='user-container'>
                 <div id='username' className='mb-4'>
                     <h1>{this.state.username}</h1>
-                    <form id='change-prof-pic' className='form-control w-100' onSubmit={this.changePicPressed}>
+                    <hr />
+                    <img id='profile-pic' src={this.state.profile_pic} />
+                    <form id='change-prof-pic' onSubmit={this.changePicPressed}>
                     </form>
                     <a id="chat" onClick={this.chatPressed}></a>
                 </div>

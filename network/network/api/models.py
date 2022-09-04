@@ -1,11 +1,12 @@
 from distutils.command.upload import upload
+from email.policy import default
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class User(AbstractUser):
     info = models.CharField(blank=True, max_length=512)
-    profile_pic = models.ImageField(blank=True, null=True, upload_to='images/')
+    profile_pic = models.ImageField(blank=True, null=True, upload_to='images/', default='images/default.jpg')
 
     def __str__(self):
         return f"{self.username}"

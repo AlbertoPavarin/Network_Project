@@ -220,3 +220,9 @@ html, .body, #main, .wrapper{
 .sticky-navbar + .wrapper {
   padding-top: 56px;
 }
+
+#profile-pic{
+  width: 50px;
+  height: 50px;
+  border-radius: 40px;
+} 
