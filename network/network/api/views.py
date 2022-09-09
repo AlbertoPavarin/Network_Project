@@ -402,7 +402,7 @@ class GetMessages(APIView):
     serializer_class = GetMessageSerilizer
     lookup_url_kwargs = ['sender', 'recipient']
 
-    def get(self, request, sender, recipient):
+    def get(self, request, sender, recipient, format=None):
         messages = []
         senderUser = User.objects.filter(username=sender)[0]
         recipientUser = User.objects.filter(username=recipient)[0]
@@ -414,3 +414,12 @@ class GetMessages(APIView):
                 messages.append({'sender': message.sender.username, 'recipient': message.recipient.username, 'content': message.content, 'timestamp':message.timestamp})
         print(messages)
         return Response({'Messages': messages}, status=status.HTTP_200_OK)
+
+class GetRandomFollowing(APIView):
+    serializer_class = FollowSerializer
+
+    def get(self, request, format=None):
+        following = Follower.objects.filter(follower=self.request.user).order_by('?')[:25]
+        if len(following) > 0:
+            return Response({'Following': FollowSerializer(following, many=True).data}, status=status.HTTP_200_OK) 
+        return Response({'Not found': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)

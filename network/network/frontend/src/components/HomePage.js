@@ -25,6 +25,7 @@ export default class HomePage extends Component {
     this.likeClick = this.likeClick.bind(this);
     this.searchChange = this.searchChange.bind(this);
     this.searchBtnPressed = this.searchBtnPressed.bind(this);
+    this.getFollowing();
   }
 
   // https://docs.djangoproject.com/en/1.11/ref/csrf/#ajax
@@ -143,27 +144,36 @@ export default class HomePage extends Component {
 
   searchBtnPressed(e) {
     e.preventDefault();
-    /*const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": this.getCookie("csrftoken"),
-      },
-      body: JSON.stringify({
-        username: this.state.searchTxt,
-      }),
-    };
-    fetch("/api/search-users", requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.log(data));*/
+    if (this.state.searchTxt.length == 0)
+    {
+      return 1;
+    }
     window.location.href = `/Search/${this.state.searchTxt}`;
+  }
+
+  getFollowing(){
+    fetch('/api/get-random-following')
+    .then((response) => response.json())
+    .then((data) => {
+      //console.log(data['Following']);
+      data['Following'].forEach((following) => {
+        fetch(`/api/get-user-id/?id=${following['following']}`)
+        .then((response) => response.json())
+        .then((user) => {
+          //console.log(data['username'])
+          const followingDiv = document.createElement('div')
+          followingDiv.classList = 'text-center';
+          followingDiv.innerHTML = `<p>${user['username']}</p><img src=${user['profile_pic']} id='profile-pic'><hr>` 
+          document.querySelector('#following-col').appendChild(followingDiv);
+        })
+      })
+    })
   }
 
   render() {
     return (
       <div>
-        <form>
-          <label htmlFor="searchbar">Search</label>
+        <form className="mt-2">
           <input
             name="searchbar"
             type="text"
@@ -176,11 +186,22 @@ export default class HomePage extends Component {
             value="Search"
             onClick={this.searchBtnPressed}
           />
-          <hr />
-          <h1>Posts</h1>
-          <hr />
-          <div className="post-container"></div>
         </form>
+        <hr />
+        <div className="home-wrapper">
+          <div className="row">
+            <div className="col-12 col-xl-2" id="following-col">
+            </div>
+            <div className="col-12 col-xl-8">
+              <h1>Posts</h1>
+              <hr />
+              <div className="post-container"></div>
+            </div>
+            <div className="col-12 col-xl-2">
+              sdrogo 2
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

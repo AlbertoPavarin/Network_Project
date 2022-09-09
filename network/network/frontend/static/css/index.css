@@ -226,3 +226,12 @@ html, .body, #main, .wrapper{
   height: 50px;
   border-radius: 40px;
 } 
+
+.home-wrapper{
+  width: 100%;
+}
+
+#following-col{
+  overflow: auto;
+  max-height: 1000px;
+}
